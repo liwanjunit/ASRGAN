@@ -24,7 +24,7 @@ if __name__ == '__main__':
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
-    BATCH_SIZE = 32
+    BATCH_SIZE = 24
 
     # G
     in_nc = 3  # 输入通道数
