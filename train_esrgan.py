@@ -12,10 +12,7 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss import GeneratorLoss
-from loss_asrgan import GeneratorLoss_ASRGAN
 from loss_esrgan import GeneratorLoss_ESRGAN, DiscriminatorLoss_ESRGAN
-from model import Generator, Discriminator
 from model_esrgan import RRDBNet, VGGStyleDiscriminator
 
 
