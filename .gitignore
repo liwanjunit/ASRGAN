@@ -1,2 +1,5 @@
-test_image
-training_results
+test_image/data/*
+test_image/results/*
+test_image/results_set/*
+test_image/target/*
+training_results/*
