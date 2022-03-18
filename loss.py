@@ -14,14 +14,17 @@ class GeneratorLoss(nn.Module):
         self.loss_network = loss_network
         self.mse_loss = nn.MSELoss()
         self.tv_loss = TVLoss()
+        self.charbonnier_loss = L1_Charbonnier_loss()
 
     def forward(self, out_labels, out_images, target_images):
         # Adversarial Loss
         adversarial_loss = torch.mean(1 - out_labels)
         # Perception Loss
-        perception_loss = self.mse_loss(self.loss_network(out_images), self.loss_network(target_images))
+        # perception_loss = self.mse_loss(self.loss_network(out_images), self.loss_network(target_images))
+        perception_loss = self.charbonnier_loss(self.loss_network(out_images), self.loss_network(target_images))
         # Image Loss
-        image_loss = self.mse_loss(out_images, target_images)
+        # image_loss = self.mse_loss(out_images, target_images)
+        image_loss = self.charbonnier_loss(out_images, target_images)
         # TV Loss
         tv_loss = self.tv_loss(out_images)
         return image_loss + 0.001 * adversarial_loss + 0.006 * perception_loss + 2e-8 * tv_loss
@@ -45,6 +48,19 @@ class TVLoss(nn.Module):
     @staticmethod
     def tensor_size(t):
         return t.size()[1] * t.size()[2] * t.size()[3]
+
+
+class L1_Charbonnier_loss(torch.nn.Module):
+    """L1 Charbonnierloss."""
+    def __init__(self):
+        super(L1_Charbonnier_loss, self).__init__()
+        self.eps = 1e-6
+
+    def forward(self, X, Y):
+        diff = torch.add(X, -Y)
+        error = torch.sqrt(diff * diff + self.eps)
+        loss = torch.mean(error)
+        return loss
 
 
 if __name__ == "__main__":

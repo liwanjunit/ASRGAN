@@ -1,4 +1,4 @@
-import argparse
+
 import os
 from math import log10
 
@@ -16,25 +16,20 @@ from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_tra
 from loss import GeneratorLoss
 from model import Generator, Discriminator
 
-parser = argparse.ArgumentParser(description='Train Super Resolution Models')
-parser.add_argument('--crop_size', default=128, type=int, help='training images crop size')
-parser.add_argument('--upscale_factor', default=4, type=int, choices=[2, 4, 8],
-                    help='super resolution upscale factor')
-parser.add_argument('--num_epochs', default=70, type=int, help='train epoch number')
 
 if __name__ == '__main__':
-    opt = parser.parse_args()
 
-    CROP_SIZE = opt.crop_size
-    UPSCALE_FACTOR = opt.upscale_factor
-    NUM_EPOCHS = opt.num_epochs
+    CROP_SIZE = 128
+    UPSCALE_FACTOR = 4
+    NUM_EPOCHS = 50
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
     BATCH_SIZE = 64
-    EPOCH_SUM = 330
-    MODEL_NAME_G = 'netG_epoch_4_330.pth'
-    MODEL_NAME_D = 'netD_epoch_4_330.pth'
+    EPOCH_SUM = 50
+
+    MODEL_NAME_G = 'netG_epoch_4_50.pth'
+    MODEL_NAME_D = 'netD_epoch_4_50.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -153,7 +148,7 @@ if __name__ == '__main__':
 
                 if image_index == 1:
                     sr_image = ToPILImage()(sr[0].data.cpu())
-                    sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (4, epoch + EPOCH_SUM))
+                    sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
                     image_index = 0
 
                 batch_mse = ((sr - hr) ** 2).data.mean()
@@ -181,7 +176,7 @@ if __name__ == '__main__':
                 index += 1
 
         # save model parameters
-        if epoch % 10 == 0 and epoch != 0:
+        if epoch % 1 == 0 and epoch != 0:
             torch.save(netG.state_dict(), 'epochs/netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
             torch.save(netD.state_dict(), 'epochs/netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
