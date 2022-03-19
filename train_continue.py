@@ -1,7 +1,6 @@
 
 import os
 from math import log10
-
 import pandas as pd
 import torch.optim as optim
 import torch.utils.data
@@ -10,7 +9,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision.transforms import ToPILImage
 from tqdm import tqdm
-
+import warnings
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss import GeneratorLoss
@@ -19,6 +18,8 @@ from model import Generator, Discriminator
 
 if __name__ == '__main__':
 
+    warnings.filterwarnings("ignore")
+
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 50
@@ -26,10 +27,10 @@ if __name__ == '__main__':
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
     BATCH_SIZE = 64
-    EPOCH_SUM = 50
+    EPOCH_SUM = 150
 
-    MODEL_NAME_G = 'netG_epoch_4_50.pth'
-    MODEL_NAME_D = 'netD_epoch_4_50.pth'
+    MODEL_NAME_G = 'netG_epoch_4_150.pth'
+    MODEL_NAME_D = 'netD_epoch_4_150.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
