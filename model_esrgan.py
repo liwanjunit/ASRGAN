@@ -4,7 +4,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-
 def make_layer(block, n_layers):
     layers = []
     for _ in range(n_layers):

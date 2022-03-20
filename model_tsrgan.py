@@ -1,7 +1,7 @@
 import math
 import torch
 from torch import nn
-
+import attention
 
 class Generator(nn.Module):
     def __init__(self, scale_factor):
@@ -24,6 +24,7 @@ class Generator(nn.Module):
         block8 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
         block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
         self.block8 = nn.Sequential(*block8)
+        self.block9 = attention.Attention()
 
     def forward(self, x):
         block1 = self.block1(x)
