@@ -52,12 +52,7 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
-        netG.load_state_dict(torch.load('epochs/'), False)
-        netD.load_state_dict(torch.load('epochs/'), False)
         generator_criterion.cuda()
-    else:
-        netG.load_state_dict(torch.load('epochs/', map_location=lambda storage, loc: storage))
-        netD.load_state_dict(torch.load('epochs/', map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)

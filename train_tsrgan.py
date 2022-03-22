@@ -1,6 +1,7 @@
 
 import os
 from math import log10
+
 import pandas as pd
 import torch.optim as optim
 import torch.utils.data
@@ -9,28 +10,26 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision.transforms import ToPILImage
 from tqdm import tqdm
-import warnings
+
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss import GeneratorLoss
-from model import Generator, Discriminator
+from model_tsrgan import Generator, Discriminator
 
 
 if __name__ == '__main__':
 
-    warnings.filterwarnings("ignore")
-
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 8
+    NUM_EPOCHS = 5
+    EPOCH_SUM = 0
+    BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
-    BATCH_SIZE = 2
-    EPOCH_SUM = 7
 
-    MODEL_NAME_G = 'netG_epoch_4_7.pth'
-    MODEL_NAME_D = 'netD_epoch_4_7.pth'
+    # MODEL_NAME_G = 'netG_epoch_4_7.pth'
+    # MODEL_NAME_D = 'netD_epoch_4_7.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -58,12 +57,12 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
         generator_criterion.cuda()
-    else:
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+    # else:
+    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -128,7 +127,7 @@ if __name__ == '__main__':
                 running_results['g_score'] / running_results['batch_sizes']))
 
         netG.eval()
-        out_path = 'training_results/SRF_' + str(UPSCALE_FACTOR) + '/'
+        out_path = 'training_results/tsrgan_SRF_' + str(UPSCALE_FACTOR) + '/'
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
@@ -149,7 +148,7 @@ if __name__ == '__main__':
 
                 if image_index == 1:
                     sr_image = ToPILImage()(sr[0].data.cpu())
-                    sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+                    sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
                     image_index = 0
 
                 batch_mse = ((sr - hr) ** 2).data.mean()
@@ -166,20 +165,19 @@ if __name__ == '__main__':
                 val_images.extend(
                     [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
                      display_transform()(sr.data.cpu().squeeze(0))])
-
             val_images = torch.stack(val_images)
             val_images = torch.chunk(val_images, val_images.size(0) // 15)
             val_save_bar = tqdm(val_images, desc='[saving training results]')
             index = 1
             for image in val_save_bar:
                 image = utils.make_grid(image, nrow=3, padding=5)
-                utils.save_image(image, out_path + 'epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
+                utils.save_image(image, out_path + 'tsrgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
                 index += 1
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
-            torch.save(netG.state_dict(), 'epochs/netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
-            torch.save(netD.state_dict(), 'epochs/netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(netG.state_dict(), 'epochs/tsrgan_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(netD.state_dict(), 'epochs/tsrgan_netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
         # save loss\scores\psnr\ssim
         results['d_loss'].append(running_results['d_loss'] / running_results['batch_sizes'])
@@ -195,4 +193,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'srf_' + str(UPSCALE_FACTOR) + '_train_results.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'srf_' + str(UPSCALE_FACTOR) + '_tsrgan_train_results.csv', index_label='Epoch')

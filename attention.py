@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+from einops import rearrange
 
 
 class Attention(nn.Module):
@@ -16,19 +17,24 @@ class Attention(nn.Module):
 		self.proj_drop = nn.Dropout(proj_drop)
 
 	def forward(self, x):
-		# print(x.shape)
-		# print(self.qkv(x).shape)
-		B, N, C = x.shape
-		qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+
+		B, C, H, W = x.shape
+		x = rearrange(x, 'b c h w -> b (h w) c')
+
+		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+		qkv = self.qkv(x)
+		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=8, s=8).permute(2, 0, 3, 1, 4)
 		q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
 
 		attn = (q @ k.transpose(-2, -1)) * self.scale
 		attn = attn.softmax(dim=-1)
 		attn = self.attn_drop(attn)
 
-		x = (attn @ v).transpose(1, 2).reshape(B, N, C)
+		x = (attn @ v).transpose(1, 2)
+		x = rearrange(x, 'b h a c -> b h (a c)')
 		x = self.proj(x)
 		x = self.proj_drop(x)
+		x = rearrange(x, 'b (h w) c -> b c h w', h=H, w=W)
 		# print("x after -->", x.shape)
 		return x
 
