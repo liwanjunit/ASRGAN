@@ -14,14 +14,15 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss import GeneratorLoss
-from model_tsrgan import Generator, Discriminator
+from model import Generator
+from model_transformer import ViT
 
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 50
+    NUM_EPOCHS = 30
     EPOCH_SUM = 0
     BATCH_SIZE = 2
 
@@ -35,11 +36,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
     #
-    # train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
@@ -49,7 +50,17 @@ if __name__ == '__main__':
 
     netG = Generator(UPSCALE_FACTOR)
     print('# generator parameters:', sum(param.numel() for param in netG.parameters()))
-    netD = Discriminator()
+    netD = ViT(
+        image_size=32,
+        patch_size=8,
+        num_classes=2,
+        dim=512,
+        depth=4,
+        heads=8,
+        mlp_dim=512,
+        dropout=0.1,
+        emb_dropout=0.1
+    )
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
     generator_criterion = GeneratorLoss()
