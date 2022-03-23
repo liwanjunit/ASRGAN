@@ -3,14 +3,16 @@ import torch
 from torch import nn
 
 from attention import Attention
+from model_transformer import PreNorm
 from einops import rearrange, repeat
 from einops.layers.torch import Rearrange
 
-class Generator(nn.Module):
+
+class Generator_TSRGAN(nn.Module):
     def __init__(self, scale_factor):
         upsample_block_num = int(math.log(scale_factor, 2))
 
-        super(Generator, self).__init__()
+        super(Generator_TSRGAN, self).__init__()
         self.block1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=9, padding=4),
             nn.PReLU()
@@ -55,15 +57,15 @@ class Generator(nn.Module):
         block3 = self.block3(block2)
         block4 = self.block4(block3)
         block5 = self.block5(block4)
-        # block6 = self.block6(block5)
-        # block7 = self.block7(block6)
+        block6 = self.block6(block5)
+        block7 = self.block7(block6)
         block8 = self.block8(block1 + block5)
         return (torch.tanh(block8) + 1) / 2
 
 
-class Discriminator(nn.Module):
+class Discriminator_TSRGAN(nn.Module):
     def __init__(self):
-        super(Discriminator, self).__init__()
+        super(Discriminator_TSRGAN, self).__init__()
         self.net = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, padding=1),
             nn.LeakyReLU(0.2),
@@ -116,18 +118,20 @@ class ResidualBlock(nn.Module):
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
         # self.bn2 = nn.BatchNorm2d(channels)
 
-        self.block_a = Attention(dim=64)
+        self.attention = Attention(dim=64)
         self.block_c = nn.Sequential(
             nn.Conv2d(3, 8, kernel_size=3, padding=1),
             nn.PReLU()
         )
+        # self.norm = nn.LayerNorm([64, 32, 32])
 
     def forward(self, x):
 
         residual = self.conv1(x)
         # residual = self.bn1(residual)
         residual = self.prelu(residual)
-        residual = self.block_a(residual)
+        residual = self.attention(residual)
+        # residual = self.norm(residual)
         # residual = self.conv2(residual)
         # residual = self.bn2(residual)
 

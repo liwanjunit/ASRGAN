@@ -14,14 +14,14 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss import GeneratorLoss
-from model_tsrgan import Generator, Discriminator
+from model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 50
+    NUM_EPOCHS = 30
     EPOCH_SUM = 0
     BATCH_SIZE = 2
 
@@ -47,9 +47,9 @@ if __name__ == '__main__':
     train_loader = DataLoader(dataset=train_set, num_workers=4, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(dataset=val_set, num_workers=4, batch_size=1, shuffle=False)
 
-    netG = Generator(UPSCALE_FACTOR)
+    netG = Generator_TSRGAN(UPSCALE_FACTOR)
     print('# generator parameters:', sum(param.numel() for param in netG.parameters()))
-    netD = Discriminator()
+    netD = Discriminator_TSRGAN()
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
     generator_criterion = GeneratorLoss()
@@ -139,8 +139,8 @@ if __name__ == '__main__':
             for val_lr, val_hr_restore, val_hr in val_bar:
                 batch_size = val_lr.size(0)
                 valing_results['batch_sizes'] += batch_size
-                lr = val_lr
-                hr = val_hr
+                lr = Variable(val_lr)
+                hr = Variable(val_hr)
                 if torch.cuda.is_available():
                     lr = lr.cuda()
                     hr = hr.cuda()

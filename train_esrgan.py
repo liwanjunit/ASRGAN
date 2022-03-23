@@ -20,11 +20,11 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 5
+    NUM_EPOCHS = 10
 
     D_INIT_LR = 0.0001
-    G_INIT_LR = 0.0001
-    BATCH_SIZE = 24
+    G_INIT_LR = 0.00001
+    BATCH_SIZE = 4
 
     # G
     in_nc = 3  # 输入通道数
@@ -36,11 +36,11 @@ if __name__ == '__main__':
 
     print(f'batch_size:{BATCH_SIZE}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)

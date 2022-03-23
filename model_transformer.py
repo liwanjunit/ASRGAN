@@ -63,9 +63,9 @@ class Attention(nn.Module):
         attn = self.attend(dots)
 
         out = torch.matmul(attn, v)
-        print('out:', out.shape)
+        # print('out:', out.shape)
         out = rearrange(out, 'b h n d -> b n (h d)')
-        print('out:', out.shape)
+        # print('out:', out.shape)
         return self.to_out(out)
 
 
@@ -121,12 +121,19 @@ class ViT(nn.Module):
         )
 
     def forward(self, img):
+        # print('img.shape:', img.shape)
         x = self.to_patch_embedding(img)
+        # print('x.shape:', x.shape)
         b, n, _ = x.shape  #
 
         cls_tokens = repeat(self.cls_token, '() n d -> b n d', b=b)
         x = torch.cat((cls_tokens, x), dim=1)
-        x += self.pos_embedding[:, :(n + 1)]
+        # print('x.shape:', x.shape)
+        # print('n.shape:', n)
+        # x += self.pos_embedding[:, :(n + 1)]
+        # i = self.pos_embedding[:, :(n + 1)]
+        # print('i.shape', i.shape)
+        # x += i
         x = self.dropout(x)
 
         x = self.transformer(x)

@@ -27,7 +27,7 @@ if __name__ == '__main__':
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
-    G_INIT_LR = 0.0001
+    G_INIT_LR = 0.00001
 
     # MODEL_NAME_G = 'netG_epoch_4_7.pth'
     # MODEL_NAME_D = 'netD_epoch_4_7.pth'
