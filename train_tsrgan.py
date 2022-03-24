@@ -22,27 +22,27 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 30
-    EPOCH_SUM = 0
+    EPOCH_SUM = 30
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = 'netG_epoch_4_7.pth'
-    # MODEL_NAME_D = 'netD_epoch_4_7.pth'
+    MODEL_NAME_G = 'tsrgan_netG_epoch_4_30.pth'
+    MODEL_NAME_D = 'tsrgan_netD_epoch_4_30.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
     train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     #
     # train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_14000/val', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
 
     train_loader = DataLoader(dataset=train_set, num_workers=4, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(dataset=val_set, num_workers=4, batch_size=1, shuffle=False)
@@ -57,12 +57,12 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
-        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
         generator_criterion.cuda()
-    # else:
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)

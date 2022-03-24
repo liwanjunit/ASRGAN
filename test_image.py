@@ -30,7 +30,7 @@ if __name__ == '__main__':
     UPSCALE_FACTOR = 4
     TEST_MODE = False
     IMAGE_NAME = 'data_13985.png'
-    MODEL_NAME = 'netG_epoch_4_330.pth'
+    MODEL_NAME = 'tsrgan_netG_epoch_4_30.pth'
 
     model = Generator(UPSCALE_FACTOR).eval()
     if TEST_MODE:
@@ -64,6 +64,6 @@ if __name__ == '__main__':
     print('sr_SSIM: {:.2f}'.format(sr_ssim))
 
     sr_image = ToPILImage()(sr_image[0].data.cpu())
-    sr_image.save('srgan_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+    sr_image.save('tsrgan_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
 
     print('Finish')
