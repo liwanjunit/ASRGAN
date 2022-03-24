@@ -56,9 +56,9 @@ class TrainDatasetFromFolder(Dataset):
 
 
 class ValDatasetFromFolder(Dataset):
-    def __init__(self, dataset_dir, crop_size, upscale_factor):
+    def __init__(self, dataset_dir, upscale_factor):
         super(ValDatasetFromFolder, self).__init__()
-        self.crop_size = crop_size
+        # self.crop_size = crop_size
         self.upscale_factor = upscale_factor
         self.image_filenames = [join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)]
 

@@ -21,9 +21,10 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 10
+    EPOCH_SUM = 0
 
     D_INIT_LR = 0.0001
-    G_INIT_LR = 0.00001
+    G_INIT_LR = 0.0001
     BATCH_SIZE = 4
 
     # G
@@ -33,8 +34,12 @@ if __name__ == '__main__':
     nb = 23   # RRDB层数
     gc = 32
 
+    MODEL_NAME_G = 'RRDB_ESRGAN_x4.pth'
+    # MODEL_NAME_D = 'netD_epoch_4_7.pth'
 
+    print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
+    print(f'upscale_factor:{UPSCALE_FACTOR}')
 
     # train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
@@ -63,6 +68,11 @@ if __name__ == '__main__':
         netD.cuda()
         G_loss.cuda()
         D_loss.cuda()
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -168,13 +178,13 @@ if __name__ == '__main__':
             index = 1
             for image in val_save_bar:
                 image = utils.make_grid(image, nrow=3, padding=5)
-                utils.save_image(image, out_path + 'esrgan_epoch_%d_index_%d.png' % (epoch, index), padding=5)
+                utils.save_image(image, out_path + 'esrgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
                 index += 1
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
-            torch.save(netG.state_dict(), 'epochs/esrgan_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch))
-            torch.save(netD.state_dict(), 'epochs/esrgan_netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch))
+            torch.save(netG.state_dict(), 'epochs/esrgan_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(netD.state_dict(), 'epochs/esrgan_netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
         # save loss\scores\psnr\ssim
         results['d_loss'].append(running_results['d_loss'] / running_results['batch_sizes'])
