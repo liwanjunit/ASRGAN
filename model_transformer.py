@@ -39,7 +39,7 @@ class FeedForward(nn.Module):
 class Attention(nn.Module):
     def __init__(self, dim, heads=8, dim_head=64, dropout=0.):
         super().__init__()
-        inner_dim = dim_head * heads  # 64 * 8 = 512
+        inner_dim = dim_head * heads  # 64 * 16 = 512
         project_out = not (heads == 1 and dim_head == dim)
 
         self.heads = heads
@@ -88,22 +88,22 @@ class Transformer(nn.Module):
 
 class ViT(nn.Module):
     def __init__(self, *, image_size, patch_size, num_classes, dim, depth, heads, mlp_dim, pool='cls', channels=3, dim_head=64, dropout=0., emb_dropout=0.):
-        #                  32 * 32       8 * 8         2       512    4      8      512
+        #                  128 * 128    16 * 16         1      1024   6      16     2048
         super().__init__()
-        image_height, image_width = pair(image_size)  # 32 * 32
-        patch_height, patch_width = pair(patch_size)  # 8 * 8
+        image_height, image_width = pair(image_size)  # 128 * 128
+        patch_height, patch_width = pair(patch_size)  # 16 * 16
 
         assert image_height % patch_height == 0 and image_width % patch_width == 0, 'Image dimensions must be divisible by the patch size.'
 
-        num_patches = (image_height // patch_height) * (image_width // patch_width)     # 4 * 4 = 16
-        patch_dim = channels * patch_height * patch_width  # 3 * 8 * 8 = 192
+        num_patches = (image_height // patch_height) * (image_width // patch_width)     # 8 * 8 = 64
+        patch_dim = channels * patch_height * patch_width  # 3 * 16 * 16 = 768
         assert pool in {'cls', 'mean'}, 'pool type must be either cls (cls token) or mean (mean pooling)'
 
         self.to_patch_embedding = nn.Sequential(
             Rearrange('b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1=patch_height, p2=patch_width),
-            #   [1, 3, 32(4 8), 32(4 8)] -> [1, 16(4 4), 192(3 8 8)]
+            #   [1, 3, 128(8 16), 128(8 16)] -> [1, 64(8 8), 768(3 16 16)]
             nn.Linear(patch_dim, dim),
-            #  192 -> 512
+            #  768 -> 1024
         )
 
         self.pos_embedding = nn.Parameter(torch.randn(1, num_patches + 1, dim))
@@ -122,18 +122,14 @@ class ViT(nn.Module):
 
     def forward(self, img):
         # print('img.shape:', img.shape)
+        batch_size = img.size(0)
         x = self.to_patch_embedding(img)
         # print('x.shape:', x.shape)
         b, n, _ = x.shape  #
 
         cls_tokens = repeat(self.cls_token, '() n d -> b n d', b=b)
         x = torch.cat((cls_tokens, x), dim=1)
-        # print('x.shape:', x.shape)
-        # print('n.shape:', n)
-        # x += self.pos_embedding[:, :(n + 1)]
-        # i = self.pos_embedding[:, :(n + 1)]
-        # print('i.shape', i.shape)
-        # x += i
+        x += self.pos_embedding[:, :(n + 1)]
         x = self.dropout(x)
 
         x = self.transformer(x)
@@ -141,4 +137,5 @@ class ViT(nn.Module):
         x = x.mean(dim=1) if self.pool == 'mean' else x[:, 0]
 
         x = self.to_latent(x)
-        return self.mlp_head(x)
+
+        return torch.sigmoid(self.mlp_head(x).view(batch_size))

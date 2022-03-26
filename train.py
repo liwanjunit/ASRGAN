@@ -139,7 +139,8 @@ if __name__ == '__main__':
                 if image_index == 1:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch))
-                    image_index = 0
+
+                image_index += 1
 
                 batch_mse = ((sr - hr) ** 2).data.mean()
                 valing_results['mse'] += batch_mse * batch_size
@@ -183,4 +184,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'srf_' + str(UPSCALE_FACTOR) + '_train_results.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'srf_' + str(UPSCALE_FACTOR) + f'_{epoch}.csv', index_label='Epoch')

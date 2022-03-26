@@ -30,27 +30,9 @@ class Generator_TSRGAN(nn.Module):
         block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
         self.block8 = nn.Sequential(*block8)
 
-        self.block_a = Attention(dim=64)
-        self.block_c = nn.Sequential(
-            nn.Conv2d(3, 8, kernel_size=3, padding=1),
-            nn.PReLU()
-        )
-        # self.to_patch_embedding = nn.Sequential(
-        #     Rearrange('b c (h p1) (w p2) -> b (h w) (p1 p2 c)', p1=8, p2=8),
-        #     #   [1, 3, 32(4 8), 32(4 8)] -> [1, 16(4 4), 192(3 8 8)]
-        #     nn.Linear(192, 512),
-        #     #  192 -> 512
-        # )
-
 
     def forward(self, x):
-        # print('x:', x.shape)
-        # to_patch_embedding = self.to_patch_embedding(x)
-        # print('p_e:', to_patch_embedding.shape)
-        # block_c = self.block_c(x)
-        # print('block_c:', block_c.shape)
-        # block_a = self.block_a(block_c)
-        # print('a:', block_a.shape)
+
         block1 = self.block1(x)
         # print('b1:', block1.shape)
         block2 = self.block2(block1)
