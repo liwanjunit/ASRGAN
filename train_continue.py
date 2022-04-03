@@ -14,11 +14,12 @@ import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss import GeneratorLoss
 from model import Generator, Discriminator
-
+import ssl
 
 if __name__ == '__main__':
 
     # warnings.filterwarnings("ignore")
+    ssl._create_default_https_context = ssl._create_unverified_context
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
