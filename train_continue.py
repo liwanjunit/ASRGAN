@@ -37,11 +37,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 1:
+                if image_index == 343:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
@@ -171,14 +171,14 @@ if __name__ == '__main__':
 
             val_images = torch.stack(val_images)
             val_images = torch.chunk(val_images, val_images.size(0) // 15)
-            val_save_bar = tqdm(val_images, desc='[saving training results]')
-            index = 1
-            for image in val_save_bar:
-                image = utils.make_grid(image, nrow=3, padding=5)
-                utils.save_image(image, out_path + 'srgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
-                index += 1
-                break
-                
+            # val_save_bar = tqdm(val_images, desc='[saving training results]')
+            # index = 1
+            # for image in val_save_bar:
+            #     image = utils.make_grid(image, nrow=3, padding=5)
+            #     utils.save_image(image, out_path + 'srgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
+            #     index += 1
+            #     break
+
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
             torch.save(netG.state_dict(), 'epochs/srgan_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
