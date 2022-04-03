@@ -85,8 +85,8 @@ class TestDatasetFromFolder(Dataset):
         # self.hr_path = dataset_dir + '/SRF_' + str(upscale_factor) + '/target/'
         self.lr_path = dataset_dir + '/data/'
         self.hr_path = dataset_dir + '/target/'
-        self.cnn_path = dataset_dir + '/target/data_13985_srcnn_x4.png'
-        self.gan_path = dataset_dir + '/target/srgan_4_400.png'
+        # self.cnn_path = dataset_dir + '/target/data_13985_srcnn_x4.png'
+        # self.gan_path = dataset_dir + '/target/srgan_4_400.png'
         self.upscale_factor = upscale_factor
         self.lr_filenames = [join(self.lr_path, x) for x in listdir(self.lr_path) if is_image_file(x)]
         self.hr_filenames = [join(self.hr_path, x) for x in listdir(self.hr_path) if is_image_file(x)]
@@ -96,11 +96,14 @@ class TestDatasetFromFolder(Dataset):
         lr_image = Image.open(self.lr_filenames[index])
         w, h = lr_image.size
         hr_image = Image.open(self.hr_filenames[index])
-        hr_scale = Resize((self.upscale_factor * h, self.upscale_factor * w), interpolation=Image.BICUBIC)
-        hr_restore_img = hr_scale(lr_image)
-        cnn_image = Image.open(self.cnn_path)
-        gan_image = Image.open(self.gan_path)
-        return image_name, ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image), ToTensor()(cnn_image), ToTensor()(gan_image)
+        # hr_scale = Resize((self.upscale_factor * h, self.upscale_factor * w), interpolation=Image.BICUBIC)
+        # hr_restore_img = hr_scale(lr_image)
+        # cnn_image = Image.open(self.cnn_path)
+        # gan_image = Image.open(self.gan_path)
+
+        return image_name, ToTensor()(lr_image), ToTensor()(hr_image)
+        # return image_name, ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image), ToTensor()(cnn_image), ToTensor()(gan_image)
+
 
     def __len__(self):
         return len(self.lr_filenames)
