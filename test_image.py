@@ -30,7 +30,9 @@ if __name__ == '__main__':
     UPSCALE_FACTOR = 4
     TEST_MODE = False
     IMAGE_NAME = 'data_13985.png'
-    MODEL_NAME = 'tsrgan_netG_epoch_4_30.pth'
+    HR_PATH = 'data/test/target/data_13985.png'
+    LR_PATH = 'data/test/data/data_13985.png'
+    MODEL_NAME = 'tsrgan_netG_epoch_4_40.pth'
 
     model = Generator(UPSCALE_FACTOR).eval()
     if TEST_MODE:
@@ -39,23 +41,34 @@ if __name__ == '__main__':
     else:
         model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage), strict=False)
 
-    hr_image = Image.open(IMAGE_NAME)
-    w, h = hr_image.size
+    hr_image = Image.open(HR_PATH)
+    lr_image = Image.open(LR_PATH)
 
-    with torch.no_grad():
-        hr_image = Variable(ToTensor()(hr_image)).unsqueeze(0)
+    hr_image = Variable(ToTensor()(hr_image), volatile=True).unsqueeze(0)
+    lr_image = Variable(ToTensor()(lr_image), volatile=True).unsqueeze(0)
 
-    lr_scale = Resize(min(w, h) // UPSCALE_FACTOR, interpolation=Image.BICUBIC)
+    # if torch.cuda.is_available():
+    #     lr_image = lr_image.cuda()
+    #     hr_image = hr_image.cuda()
 
-    lr_image = lr_scale(hr_image)
+    # w, h = hr_image.size
+    #
+    # with torch.no_grad():
+    #     hr_image = Variable(ToTensor()(hr_image)).unsqueeze(0)
+    #
+    # lr_scale = Resize(min(w, h) // UPSCALE_FACTOR, interpolation=Image.BICUBIC)
+    #
+    # lr_image = lr_scale(hr_image)
 
-    if TEST_MODE:
-        hr_image = hr_image.cuda()
+
+    # if TEST_MODE:
+    #     hr_image = hr_image.cuda()
 
     start = time.perf_counter()
     sr_image = model(lr_image)
     elapsed = (time.perf_counter() - start)
     print('cost' + str(elapsed) + 's')
+
 
     sr_psnr = calc_psnr(hr_image, sr_image)
     print('sr_PSNR: {:.2f}'.format(sr_psnr))
@@ -65,5 +78,12 @@ if __name__ == '__main__':
 
     sr_image = ToPILImage()(sr_image[0].data.cpu())
     sr_image.save('tsrgan_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+    #
+    # lr_image = ToPILImage()(lr_image[0].data.cpu())
+    # lr_image.save('tsrgan_lr_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+    #
+    # hr_image = ToPILImage()(hr_image[0].data.cpu())
+    # hr_image.save('tsrgan_hr_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+
 
     print('Finish')

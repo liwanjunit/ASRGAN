@@ -39,8 +39,8 @@ class Generator_TSRGAN(nn.Module):
         block3 = self.block3(block2)
         block4 = self.block4(block3)
         block5 = self.block5(block4)
-        # block6 = self.block6(block5)
-        # block7 = self.block7(block6)
+        block6 = self.block6(block5)
+        block7 = self.block7(block6)
         block8 = self.block8(block1 + block5)
         return (torch.tanh(block8) + 1) / 2
 

@@ -2,18 +2,18 @@
 from PIL import Image
 from torchvision.transforms import Resize, RandomCrop, ToPILImage
 
+crop_size = 64
+
+
 crop = RandomCrop((320, 480))
-resize = Resize((160, 240), interpolation=Image.BICUBIC)
+lr_scale = Resize(crop_size, interpolation=Image.BICUBIC)
 
-for i in range(4):
-    path = f'data/{i+1}.png'
-    img = Image.open(path)
+for i in range(358):
+    path = f'data/test/target/data_{i+13643}.png'
+    hr_img = Image.open(path)
 
-    img = crop(img)
-    img.save(f'test_image/target/{i+1}.png')
-
-    img = resize(img)
-    img.save(f'test_image/data/{i+1}.png')
+    lr_img = lr_scale(hr_img)
+    lr_img.save(f'data/test/data/data_{i+13643}.png')
 
 
 
