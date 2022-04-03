@@ -23,15 +23,15 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 16
-    EPOCH_SUM = 34
+    NUM_EPOCHS = 20
+    EPOCH_SUM = 50
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME_G = 'srgan_netG_epoch_4_34.pth'
-    MODEL_NAME_D = 'srgan_netD_epoch_4_34.pth'
+    MODEL_NAME_G = 'srgan_netG_epoch_4_50.pth'
+    MODEL_NAME_D = 'srgan_netD_epoch_4_50.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
