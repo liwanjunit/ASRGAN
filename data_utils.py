@@ -104,6 +104,5 @@ class TestDatasetFromFolder(Dataset):
         return image_name, ToTensor()(lr_image), ToTensor()(hr_image)
         # return image_name, ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image), ToTensor()(cnn_image), ToTensor()(gan_image)
 
-
     def __len__(self):
         return len(self.lr_filenames)

@@ -10,7 +10,7 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision.transforms import ToPILImage
 from tqdm import tqdm
-
+import matplotlib.pyplot as plt
 import pytorch_ssim
 from data_utils import TestDatasetFromFolder, display_transform
 from model import Generator
@@ -18,12 +18,18 @@ from model import Generator
 if __name__ == '__main__':
 
     UPSCALE_FACTOR = 4
+    index = 1
 
-    MODEL_NAME = 'srgan_netG_epoch_4_30.pth'
+    MODEL_NAME = 'srgan_netG_epoch_4_50.pth'
     TEST_PATH = 'data/test'
 
-    results = {'Set5': {'psnr': [], 'ssim': []}, 'Set14': {'psnr': [], 'ssim': []}, 'BSD100': {'psnr': [], 'ssim': []},
-               'Urban100': {'psnr': [], 'ssim': []}, 'SunHays80': {'psnr': [], 'ssim': []}, 'data_14000': {'psnr': [], 'ssim': []}}
+    psnr_set = []
+    ssim_set = []
+
+    max_psnr = 0
+    max_psnr_index = 0
+    max_ssim = 0
+    max_ssim_index = 0
 
     model = Generator(UPSCALE_FACTOR).eval()
     if torch.cuda.is_available():
@@ -40,68 +46,48 @@ if __name__ == '__main__':
         os.makedirs(out_path)
 
     for image_name, lr_image, hr_image in test_bar:
+
         image_name = image_name[0]
+
         lr_image = Variable(lr_image, volatile=True)
         hr_image = Variable(hr_image, volatile=True)
-        cnn_image = Variable(cnn_image, volatile=True)
-        gan_image = Variable(gan_image, volatile=True)
+
         if torch.cuda.is_available():
             lr_image = lr_image.cuda()
             hr_image = hr_image.cuda()
-            bic_image = bic_image.cuda()
-            cnn_image = cnn_image.cuda()
-            gan_image = gan_image.cuda()
 
         sr_image = model(lr_image)
 
-        bicubic_psnr = 10 * log10(1 / ((hr_image - bic_image) ** 2).data.mean())
-        srcnn_psnr = 10 * log10(1 / ((hr_image - cnn_image) ** 2).data.mean())
-        srgan_psnr = 10 * log10(1 / ((hr_image - gan_image) ** 2).data.mean())
-        tsrgan_psnr = 10 * log10(1 / ((hr_image - sr_image) ** 2).data.mean())
-        print('bicubic_PSNR: {:.4f}'.format(bicubic_psnr))
-        print('srcnn_PSNR:   {:.4f}'.format(srcnn_psnr))
-        print('srgan_PSNR:   {:.4f}'.format(srgan_psnr))
-        print('tsrgan_PSNR:  {:.4f}'.format(tsrgan_psnr))
+        psnr = 10 * log10(1 / ((hr_image - sr_image) ** 2).data.mean())
+        # print('PSNR:  {:.4f}'.format(psnr))
+        ssim = pytorch_ssim.ssim(sr_image, hr_image).item()
+        # print('SSIM:  {:.4f}'.format(ssim))
 
-
-        bicubic_ssim = pytorch_ssim.ssim(bic_image, hr_image).item()
-        srcnn_ssim = pytorch_ssim.ssim(cnn_image, hr_image).item()
-        srgan_ssim = pytorch_ssim.ssim(gan_image, hr_image).item()
-        tsrgan_ssim = pytorch_ssim.ssim(sr_image, hr_image).item()
-        print('bicubic_SSIM: {:.4f}'.format(bicubic_ssim))
-        print('srcnn_SSIM:   {:.4f}'.format(srcnn_ssim))
-        print('srgan_SSIM:   {:.4f}'.format(srgan_ssim))
-        print('tsrgan_SSIM:  {:.4f}'.format(tsrgan_ssim))
-
-
-        test_images = torch.stack(
-            [display_transform()(bic_image.data.cpu().squeeze(0)), display_transform()(cnn_image.data.cpu().squeeze(0)),
-             display_transform()(gan_image.data.cpu().squeeze(0)), display_transform()(sr_image.data.cpu().squeeze(0)),
-             display_transform()(hr_image.data.cpu().squeeze(0))])
-        image = utils.make_grid(test_images, nrow=5, padding=5)
-        utils.save_image(image, out_path + image_name.split('.')[0] + '_psnr_%.4f_ssim_%.4f.' % (tsrgan_psnr, tsrgan_ssim) +
+        test_images = torch.stack([display_transform()(sr_image.data.cpu().squeeze(0)), display_transform()(hr_image.data.cpu().squeeze(0))])
+        image = utils.make_grid(test_images, nrow=2, padding=5)
+        utils.save_image(image, out_path + f'{index}' + '_psnr_%.4f_ssim_%.4f.' % (psnr, ssim) +
                          image_name.split('.')[-1], padding=5)
 
-        # save psnr\ssim
-        results['data_14000']['psnr'].append(tsrgan_psnr)
-        results['data_14000']['ssim'].append(tsrgan_ssim)
-        #
-        # sr_image = ToPILImage()(sr_image[0].data.cpu())
-        # sr_image.save('tsrgan_' + str(UPSCALE_FACTOR) + '_' + image_name + '.png')
 
-    out_path = 'statistics/'
-    saved_results = {'psnr': [], 'ssim': []}
-    for item in results.values():
-        psnr = np.array(item['psnr'])
-        ssim = np.array(item['ssim'])
-        if (len(psnr) == 0) or (len(ssim) == 0):
-            psnr = 'No data'
-            ssim = 'No data'
-        else:
-            psnr = psnr.mean()
-            ssim = ssim.mean()
-        saved_results['psnr'].append(psnr)
-        saved_results['ssim'].append(ssim)
+        if psnr > max_psnr:
+            max_psnr = psnr
+            max_psnr_index = index
+        if ssim > max_ssim:
+            max_ssim = ssim
+            max_ssim_index = index
 
-    data_frame = pd.DataFrame(saved_results, results.keys())
-    data_frame.to_csv(out_path + 'srf_' + str(UPSCALE_FACTOR) + '_test_results.csv', index_label='DataSet')
+        psnr_set.append(psnr)
+        ssim_set.append(ssim)
+
+        index += 1
+
+    print('max_psnr：{:.4f}'.format(max_psnr))
+    print('index：{:.4f}' .format(max_psnr_index))
+    print('max_ssim：{:.4f}'.format(max_ssim))
+    print('index：{:.4f}' .format(max_ssim_index))
+
+    x = range(1, index)
+    plt.figure()
+    plt.plot(x, psnr_set)
+    plt.show()
+

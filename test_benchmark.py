@@ -20,8 +20,7 @@ if __name__ == '__main__':
     UPSCALE_FACTOR = 4
     MODEL_NAME = 'tsrgan_netG_epoch_4_20.pth'
 
-    results = {'Set5': {'psnr': [], 'ssim': []}, 'Set14': {'psnr': [], 'ssim': []}, 'BSD100': {'psnr': [], 'ssim': []},
-               'Urban100': {'psnr': [], 'ssim': []}, 'SunHays80': {'psnr': [], 'ssim': []}, 'data_14000': {'psnr': [], 'ssim': []}}
+    results = {'data_17500': {'psnr': [], 'ssim': []}}
 
     model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
     if torch.cuda.is_available():
@@ -81,8 +80,8 @@ if __name__ == '__main__':
                          image_name.split('.')[-1], padding=5)
 
         # save psnr\ssim
-        results['data_14000']['psnr'].append(tsrgan_psnr)
-        results['data_14000']['ssim'].append(tsrgan_ssim)
+        results['data_17500']['psnr'].append(tsrgan_psnr)
+        results['data_17500']['ssim'].append(tsrgan_ssim)
         #
         # sr_image = ToPILImage()(sr_image[0].data.cpu())
         # sr_image.save('tsrgan_' + str(UPSCALE_FACTOR) + '_' + image_name + '.png')
