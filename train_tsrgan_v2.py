@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss import GeneratorLoss
+from loss_new import GeneratorLoss
 from model import Generator
 from model_transformer import ViT
 
