@@ -13,15 +13,15 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss_new import GeneratorLoss
-from model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
+from loss.loss_new import GeneratorLoss
+from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 10
+    NUM_EPOCHS = 20
     EPOCH_SUM = 60
     BATCH_SIZE = 2
 

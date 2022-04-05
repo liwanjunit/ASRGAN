@@ -8,12 +8,11 @@ import torch
 import torchvision.utils as utils
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-from torchvision.transforms import ToPILImage
 from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TestDatasetFromFolder, display_transform
-from model_tsrgan import Generator_TSRGAN
+from model.model_tsrgan import Generator_TSRGAN
 
 if __name__ == '__main__':
 

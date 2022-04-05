@@ -12,8 +12,8 @@ from tqdm import tqdm
 import warnings
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss import GeneratorLoss
-from model import Generator, Discriminator
+from loss.loss import GeneratorLoss
+from model.model import Generator, Discriminator
 import ssl
 
 if __name__ == '__main__':

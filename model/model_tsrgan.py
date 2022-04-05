@@ -1,11 +1,7 @@
 import math
 import torch
 from torch import nn
-
 from attention import Attention
-from model_transformer import PreNorm
-from einops import rearrange, repeat
-from einops.layers.torch import Rearrange
 
 
 class Generator_TSRGAN(nn.Module):

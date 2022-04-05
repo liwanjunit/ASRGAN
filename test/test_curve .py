@@ -11,7 +11,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import pytorch_ssim
 from data_utils import TestDatasetFromFolder, display_transform
-from model import Generator
+from model.model import Generator
 
 if __name__ == '__main__':
 

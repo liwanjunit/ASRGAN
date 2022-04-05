@@ -1,11 +1,8 @@
-import math
 import torch
-from torch import autograd as autograd
 from torch import nn as nn
 from torch.nn import functional as F
-from torchvision.models.vgg import vgg19
 
-from vgg_arch import VGGFeatureExtractor
+from model.vgg_arch import VGGFeatureExtractor
 
 _reduction_modes = ['none', 'mean', 'sum']
 

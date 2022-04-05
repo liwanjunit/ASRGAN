@@ -13,9 +13,9 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss_new import GeneratorLoss
-from model import Generator
-from model_transformer import ViT
+from loss.loss_new import GeneratorLoss
+from model.model import Generator
+from model.model_transformer import ViT
 
 
 if __name__ == '__main__':
