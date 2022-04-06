@@ -6,6 +6,7 @@ import torch
 import torchvision.utils as utils
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
+import pandas as pd
 
 from tqdm import tqdm
 import matplotlib.pyplot as plt
@@ -39,7 +40,7 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        MODEL_NAME = f'C:/code/train_results/new_model/srgan_x4/G/srgan_netG_epoch_4_{i+1}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+1}.pth'
 
         model = Generator(UPSCALE_FACTOR).eval()
         if torch.cuda.is_available():
@@ -79,7 +80,16 @@ if __name__ == '__main__':
 
         psnr_set.append(psnr_sum / index)
         ssim_set.append(ssim_sum / index)
+
         epoch_sum += 1
+
+    out_path = '../statistics/'
+    data_frame = pd.DataFrame(
+        data={'PSNR': psnr_set, 'SSIM': ssim_set},
+        index=range(1, epoch_sum))
+    data_frame.to_csv(out_path + 'tsrgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+
+
 
     x = range(1, epoch_sum)
 
