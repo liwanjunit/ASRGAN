@@ -88,7 +88,6 @@ if __name__ == '__main__':
     plt.plot(x, psnr_set)
     plt.xlabel("PSNR")
 
-    plt.figure(2)
     plt.subplot(1, 2, 2)
     plt.plot(x, ssim_set)
     plt.xlabel("SSIM")
