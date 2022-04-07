@@ -84,6 +84,7 @@ class TestDatasetFromFolder(Dataset):
         # self.lr_path = dataset_dir + '/SRF_' + str(upscale_factor) + '/data/'
         # self.hr_path = dataset_dir + '/SRF_' + str(upscale_factor) + '/target/'
         self.lr_path = dataset_dir + '/data/'
+        # self.lr_path = dataset_dir + '/bicubic/'
         self.hr_path = dataset_dir + '/target/'
         # self.cnn_path = dataset_dir + '/target/data_13985_srcnn_x4.png'
         # self.gan_path = dataset_dir + '/target/srgan_4_400.png'

@@ -6,7 +6,7 @@ from torch.autograd import Variable
 from torchvision.transforms import ToTensor, ToPILImage, Resize
 
 import pytorch_ssim
-from model import Generator
+from model.model import Generator
 from math import log10
 
 
