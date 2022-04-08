@@ -69,7 +69,6 @@ if __name__ == '__main__':
     elapsed = (time.perf_counter() - start)
     print('cost' + str(elapsed) + 's')
 
-
     sr_psnr = calc_psnr(hr_image, sr_image)
     print('sr_PSNR: {:.2f}'.format(sr_psnr))
 
@@ -84,6 +83,5 @@ if __name__ == '__main__':
     #
     # hr_image = ToPILImage()(hr_image[0].data.cpu())
     # hr_image.save('tsrgan_hr_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
-
 
     print('Finish')

@@ -1,76 +1,63 @@
+
 import torch
 from PIL import Image
-from torch.autograd import Variable
-from torch.utils.data import DataLoader
-from tqdm import tqdm
-
 import pytorch_ssim
-from data_utils import ValDatasetFromFolder, display_transform
-from model import Generator
-import time
-import matplotlib.pyplot as plt
 import torchvision.utils as utils
-from torchvision.transforms import Compose, ToTensor, ToPILImage, CenterCrop, Resize
+from torchvision.transforms import ToTensor, ToPILImage
 from math import log10
-
-
-def calc_psnr(img1, img2):
-    return 10. * log10(img2.max() ** 2 / torch.mean((img1 / 1. - img2 / 1.) ** 2))
-
+from torch.autograd import Variable
+from data_utils import display_transform
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-    # device = torch.device("cpu")
+    image_name = 'data_13985.png'
+    print('image_name: ' + image_name)
+    print('----------------------')
 
-    out_path = 'test_image/results_set/'
-    epoch = 100
+    PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/'
 
-    test_set = ValDatasetFromFolder('../data_17500/test', upscale_factor=4)
-    test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
+    hr_image = ToTensor()(Image.open(PATH + 'hr/' + image_name))
+    bicubic_image = ToTensor()(Image.open(PATH + 'bicubic/' + image_name))
+    srcnn_image = ToTensor()(Image.open(PATH + 'srcnn/' + image_name))
+    srgan_image = ToTensor()(Image.open(PATH + 'srgan/' + image_name))
+    tsrgan_image = ToTensor()(Image.open(PATH + 'tsrgan/' + image_name))
 
-    G = Generator(4).to(device)
-    G.load_state_dict(torch.load(f'C:/Users/lai/Downloads/netG_epoch_4_{epoch}.pth', map_location=device))
+    hr_image = Variable(hr_image, volatile=True).unsqueeze(0)
+    bicubic_image = Variable(bicubic_image, volatile=True).unsqueeze(0)
+    srcnn_image = Variable(srcnn_image, volatile=True).unsqueeze(0)
+    srgan_image = Variable(srgan_image, volatile=True).unsqueeze(0)
+    tsrgan_image = Variable(tsrgan_image, volatile=True).unsqueeze(0)
 
-    test_bar = tqdm(test_loader)
-    test_images = []
-    index = 1
+    bicubic_psnr = 10 * log10(1 / ((hr_image - bicubic_image) ** 2).data.mean())
+    srcnn_psnr = 10 * log10(1 / ((hr_image - srcnn_image) ** 2).data.mean())
+    srgan_psnr = 10 * log10(1 / ((hr_image - srgan_image) ** 2).data.mean())
+    tsrgan_psnr = 10 * log10(1 / ((hr_image - tsrgan_image) ** 2).data.mean())
+    print('bicubic_PSNR: {:.4f}'.format(bicubic_psnr))
+    print('srcnn_PSNR:   {:.4f}'.format(srcnn_psnr))
+    print('srgan_PSNR:   {:.4f}'.format(srgan_psnr))
+    print('tsrgan_PSNR:  {:.4f}'.format(tsrgan_psnr))
 
-    for test_lr, test_hr_restore, test_hr in test_bar:
+    print('----------------------')
 
-        batch_size = test_lr.size(0)
+    bicubic_ssim = pytorch_ssim.ssim(bicubic_image, hr_image)
+    srcnn_ssim = pytorch_ssim.ssim(srcnn_image, hr_image)
+    srgan_ssim = pytorch_ssim.ssim(srgan_image, hr_image).item()
+    tsrgan_ssim = pytorch_ssim.ssim(tsrgan_image, hr_image).item()
+    print('bicubic_SSIM: {:.4f}'.format(bicubic_ssim))
+    print('srcnn_SSIM:   {:.4f}'.format(srcnn_ssim))
+    print('srgan_SSIM:   {:.4f}'.format(srgan_ssim))
+    print('tsrgan_SSIM:  {:.4f}'.format(tsrgan_ssim))
 
-        lr = test_lr
-        hr = test_hr
-        if torch.cuda.is_available():
-            lr = lr.cuda()
-            hr = hr.cuda()
-        sr = G(lr)
+    print('----------------------')
 
-        # val_images.extend(
-        #     [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
-        #      display_transform()(sr.data.cpu().squeeze(0))])
+    test_images = torch.stack(
+        [display_transform()(bicubic_image.data.cpu().squeeze(0)), display_transform()(srcnn_image.data.cpu().squeeze(0)),
+         display_transform()(srgan_image.data.cpu().squeeze(0)), display_transform()(tsrgan_image.data.cpu().squeeze(0)),
+         display_transform()(hr_image.data.cpu().squeeze(0))])
+    image = utils.make_grid(test_images, nrow=5, padding=5)
+    utils.save_image(image, PATH + image_name.split('.')[0] + '_compared' + '.png')
 
-        print(f'---------第{index}个---------')
-        sr_psnr = calc_psnr(hr, sr)
-        print('sr_PSNR: {:.2f}'.format(sr_psnr))
-        sr_ssim = pytorch_ssim.ssim(sr, hr)
-        print('sr_SSIM: {:.2f}'.format(sr_ssim))
 
-        sr_image = ToPILImage()(sr[0].data.cpu())
-        sr_image.save(out_path + 'srgan_%d_%d.png' % (4, index))
-        index += 1
-
-    test_images = torch.stack(test_images)
-    test_images = torch.chunk(test_images, test_images.size(0) // 15)
-    test_save_bar = tqdm(test_images, desc='[saving training results]')
-    index = 1
-
-    for image in test_save_bar:
-        image = utils.make_grid(image, nrow=3, padding=5)
-        utils.save_image(image, out_path + 'epoch_%d_index_%d.png' % (epoch, index), padding=5)
-        index += 1
 
     print(f'Finish')
-
-
