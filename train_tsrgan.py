@@ -22,14 +22,14 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 25
-    EPOCH_SUM = 125
+    EPOCH_SUM = 150
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = 'tsrgan_netG_epoch_4_125.pth'
-    MODEL_NAME_D = 'tsrgan_netD_epoch_4_125.pth'
+    MODEL_NAME_G = 'tsrgan_netG_epoch_4_150.pth'
+    MODEL_NAME_D = 'tsrgan_netD_epoch_4_150.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -197,4 +197,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'tsrgan_srf_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'tsrgan_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')

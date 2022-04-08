@@ -34,14 +34,14 @@ if __name__ == '__main__':
     if not os.path.exists(out_path):
         os.makedirs(out_path)
 
-    for i in range(40):
+    for i in range(75):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
         # MODEL_NAME = f'C:/code/train_results/model/t_x4/G/tsrgan_netG_epoch_4_{i+30}.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+10}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+50}.pth'
         # MODEL_NAME = f'C:/code/SRCNN_Pytorch_1.0-master/SRCNN_Pytorch_1.0-master/outputs/x4/epoch_{i+1}.pth'
 
         model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
