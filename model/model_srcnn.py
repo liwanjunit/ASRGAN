@@ -1,6 +1,5 @@
 from torch import nn
 
-
 class SRCNN(nn.Module):
     def __init__(self, num_channels=3):
         super(SRCNN, self).__init__()

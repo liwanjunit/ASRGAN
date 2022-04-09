@@ -1,79 +1,103 @@
-import argparse
-import time
+
 import torch
 from PIL import Image
-from torch.autograd import Variable
-from torchvision.transforms import ToTensor, ToPILImage, Resize
-
 import pytorch_ssim
-from model import Generator
+import torchvision.utils as utils
+from torchvision.transforms import ToTensor, ToPILImage, Resize
 from math import log10
-
-
-def calc_psnr(img1, img2):
-    return 10. * log10(img2.max() ** 2 / torch.mean((img1 / 1. - img2 / 1.) ** 2))
-
+from torch.autograd import Variable
+from data_utils import display_transform
+import matplotlib.pyplot as plt
+from model.model_tsrgan import Generator_TSRGAN
+from model.model_srcnn import SRCNN
+from model.model import Generator
 
 if __name__ == '__main__':
 
-
+    CROP_SIZE = 256
     UPSCALE_FACTOR = 4
-    TEST_MODE = False
 
-    MODEL_NAME = 'tsrgan_netG_epoch_4_40.pth'
+    image_name = 'data_5345.png'
+    print('image_name: ' + image_name)
+    print('----------------------')
 
-    model = Generator(UPSCALE_FACTOR).eval()
-    if TEST_MODE:
-        model.cuda()
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), strict=False)
-    else:
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage), strict=False)
+    PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/'
 
-    for i in range(385):
+    SRCNN_MODEL_NAME = 'C:/code/SRCNN_Pytorch_1.0-master/SRCNN_Pytorch_1.0-master/outputs/x4/epoch_144.pth'
+    SRGAN_MODEL_NAME = 'C:/code/train_results/new_model/srgan_x4/G/srgan_netG_epoch_4_193.pth'
+    TSRGAN_MODEL_NAME = 'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_145.pth'
 
-        IMAGE_NAME = f'data_{i+13985}.png'
-        HR_PATH = f'data/test/target/data_{i+13985}.png'
-        LR_PATH = f'data/test/data/data_{i+13985}.png'
-        SR_PATH = f'data/test/results/'
+    hr_path = 'C:/code/ASRGAN/ASRGAN-master/data/test_x4/target/'
+    bicubic_path = 'C:/code/ASRGAN/ASRGAN-master/data/test_x4/bicubic/'
 
-        hr_image = Image.open(HR_PATH)
-        lr_image = Image.open(LR_PATH)
+    srcnn_model = SRCNN().eval()
+    srgan_model = Generator(UPSCALE_FACTOR).eval()
+    tsrgan_model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
 
-        hr_image = Variable(ToTensor()(hr_image), volatile=True)
-        lr_image = Variable(ToTensor()(lr_image), volatile=True)
+    if torch.cuda.is_available():
+        srcnn_model = srcnn_model.cuda()
+        srgan_model = srgan_model.cuda()
+        tsrgan_model = tsrgan_model.cuda()
+    srcnn_model.load_state_dict(torch.load(SRCNN_MODEL_NAME), False)
+    srgan_model.load_state_dict(torch.load(SRGAN_MODEL_NAME), False)
+    tsrgan_model.load_state_dict(torch.load(TSRGAN_MODEL_NAME), False)
 
-        # if torch.cuda.is_available():
-        #     lr_image = lr_image.cuda()
-        #     hr_image = hr_image.cuda()
+    hr_image = Image.open(hr_path + image_name)
+    bicubic_image = ToTensor()(Image.open(bicubic_path + image_name))
 
-        sr_image = model(lr_image)
-        mse = ((hr_image - sr_image) ** 2).data.mean()
-        psnr = 10 * log10(1 / mse)
-        print(psnr)
-        ssim = pytorch_ssim.ssim(sr_image, hr_image).item()
-        print(ssim)
+    lr_scale = Resize(CROP_SIZE // UPSCALE_FACTOR, interpolation=Image.BICUBIC)
+    lr_image = lr_scale(hr_image)
 
-        sr_image = ToPILImage()(sr_image[0].data.cpu())
-        sr_image.save(SR_PATH + 'tsrgan_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+    lr_image = Variable(ToTensor()(lr_image), volatile=True).unsqueeze(0)
+    hr_image = Variable(ToTensor()(hr_image), volatile=True).unsqueeze(0)
+    bicubic_image = Variable(bicubic_image, volatile=True).unsqueeze(0)
 
-    # sr_psnr = calc_psnr(hr_image, sr_image)
-    # print('sr_PSNR: {:.2f}'.format(sr_psnr))
-    #
-    # sr_ssim = pytorch_ssim.ssim(sr_image, hr_image)
-    # print('sr_SSIM: {:.2f}'.format(sr_ssim))
+    # srcnn_image = Variable(srcnn_image, volatile=True).unsqueeze(0)
+    # srgan_image = Variable(srgan_image, volatile=True).unsqueeze(0)
+    # tsrgan_image = Variable(tsrgan_image, volatile=True).unsqueeze(0)
 
-    # sr_image = ToPILImage()(sr_image[0].data.cpu())
-    # sr_image.save('tsrgan_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
-    #
-    # lr_image = ToPILImage()(lr_image[0].data.cpu())
-    # lr_image.save('tsrgan_lr_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
-    #
-    # hr_image = ToPILImage()(hr_image[0].data.cpu())
-    # hr_image.save('tsrgan_hr_' + str(UPSCALE_FACTOR) + '_' + IMAGE_NAME)
+    if torch.cuda.is_available():
+        lr_image = lr_image.cuda()
+        hr_image = hr_image.cuda()
+        bicubic_image = bicubic_image.cuda()
 
+    srcnn_image = srcnn_model(bicubic_image)
+    srgan_image = srgan_model(lr_image)
+    tsrgan_image = tsrgan_model(lr_image)
 
+    bicubic_psnr = 10 * log10(1 / ((hr_image - bicubic_image) ** 2).data.mean())
+    srcnn_psnr = 10 * log10(1 / ((hr_image - srcnn_image) ** 2).data.mean())
+    srgan_psnr = 10 * log10(1 / ((hr_image - srgan_image) ** 2).data.mean())
+    tsrgan_psnr = 10 * log10(1 / ((hr_image - tsrgan_image) ** 2).data.mean())
+    print('bicubic_PSNR: {:.4f}'.format(bicubic_psnr))
+    print('srcnn_PSNR:   {:.4f}'.format(srcnn_psnr))
+    print('srgan_PSNR:   {:.4f}'.format(srgan_psnr))
+    print('tsrgan_PSNR:  {:.4f}'.format(tsrgan_psnr))
 
+    print('----------------------')
 
-    print('Finish')
+    bicubic_ssim = pytorch_ssim.ssim(bicubic_image, hr_image)
+    srcnn_ssim = pytorch_ssim.ssim(srcnn_image, hr_image)
+    srgan_ssim = pytorch_ssim.ssim(srgan_image, hr_image).item()
+    tsrgan_ssim = pytorch_ssim.ssim(tsrgan_image, hr_image).item()
+    print('bicubic_SSIM: {:.4f}'.format(bicubic_ssim))
+    print('srcnn_SSIM:   {:.4f}'.format(srcnn_ssim))
+    print('srgan_SSIM:   {:.4f}'.format(srgan_ssim))
+    print('tsrgan_SSIM:  {:.4f}'.format(tsrgan_ssim))
 
+    print('----------------------')
 
+    test_images = torch.stack(
+        [display_transform()(bicubic_image.data.cpu().squeeze(0)), display_transform()(srcnn_image.data.cpu().squeeze(0)),
+         display_transform()(srgan_image.data.cpu().squeeze(0)), display_transform()(tsrgan_image.data.cpu().squeeze(0)),
+         display_transform()(hr_image.data.cpu().squeeze(0))])
+    image = utils.make_grid(test_images, nrow=5, padding=5)
+    utils.save_image(image, PATH + image_name.split('.')[0] + '_compared' + '.png')
+
+    result = Image.open(PATH + image_name.split('.')[0] + '_compared' + '.png')
+
+    plt.figure()
+    plt.imshow(result)
+    plt.show()
+
+    print(f'Finish')
