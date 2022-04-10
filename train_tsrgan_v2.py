@@ -22,15 +22,15 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 10
-    EPOCH_SUM = 0
+    NUM_EPOCHS = 20
+    EPOCH_SUM = 10
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_50.pth'
-    # MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_50.pth'
+    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_10.pth'
+    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_10.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -71,13 +71,13 @@ if __name__ == '__main__':
         generator_criterion.cuda()
         # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-        # netG.load_state_dict(torch.load(MODEL_NAME_G), False)
-        # netD.load_state_dict(torch.load(MODEL_NAME_D), False)
-    # else:
-    #     netG.load_state_dict(torch.load(MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load(MODEL_NAME_D, map_location=lambda storage, loc: storage))
-    #     # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        netG.load_state_dict(torch.load(MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load(MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load(MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load(MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
