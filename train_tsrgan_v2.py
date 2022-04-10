@@ -177,18 +177,18 @@ if __name__ == '__main__':
                 val_bar.set_description(
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f' % (
                         valing_results['psnr'], valing_results['ssim']))
-
-                val_images.extend(
-                    [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
-                     display_transform()(sr.data.cpu().squeeze(0))])
-            val_images = torch.stack(val_images)
-            val_images = torch.chunk(val_images, val_images.size(0) // 15)
-            val_save_bar = tqdm(val_images, desc='[saving training results]')
-            index = 1
-            for image in val_save_bar:
-                image = utils.make_grid(image, nrow=3, padding=5)
-                utils.save_image(image, out_path + 'tsrgan_v2_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
-                index += 1
+            #
+            #     val_images.extend(
+            #         [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
+            #          display_transform()(sr.data.cpu().squeeze(0))])
+            # val_images = torch.stack(val_images)
+            # val_images = torch.chunk(val_images, val_images.size(0) // 15)
+            # val_save_bar = tqdm(val_images, desc='[saving training results]')
+            # index = 1
+            # for image in val_save_bar:
+            #     image = utils.make_grid(image, nrow=3, padding=5)
+            #     utils.save_image(image, out_path + 'tsrgan_v2_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
+            #     index += 1
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
