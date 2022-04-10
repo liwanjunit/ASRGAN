@@ -29,14 +29,14 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(25):
+    for i in range(15):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
         # MODEL_NAME = f'C:/code/train_results/model/t_x4/G/tsrgan_netG_epoch_4_{i+30}.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+125}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+185}.pth'
         # MODEL_NAME = f'C:/code/SRCNN_Pytorch_1.0-master/SRCNN_Pytorch_1.0-master/outputs/x4/epoch_{i+1}.pth'
 
         model = Generator_TSRGAN(UPSCALE_FACTOR).eval()

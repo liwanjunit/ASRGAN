@@ -23,9 +23,9 @@ if __name__ == '__main__':
 
     PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/'
 
-    SRCNN_MODEL_NAME = 'C:/code/SRCNN_Pytorch_1.0-master/SRCNN_Pytorch_1.0-master/outputs/x4/epoch_144.pth'
+    SRCNN_MODEL_NAME = 'C:/code/SRCNN_Pytorch_1.0-master/SRCNN_Pytorch_1.0-master/outputs/x4/epoch_191.pth'
     SRGAN_MODEL_NAME = 'C:/code/train_results/new_model/srgan_x4/G/srgan_netG_epoch_4_193.pth'
-    TSRGAN_MODEL_NAME = 'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_145.pth'
+    TSRGAN_MODEL_NAME = 'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_177.pth'
 
     hr_path = 'C:/code/ASRGAN/ASRGAN-master/data/test_x4/target/'
     bicubic_path = 'C:/code/ASRGAN/ASRGAN-master/data/test_x4/bicubic/'
@@ -43,14 +43,15 @@ if __name__ == '__main__':
     tsrgan_model.load_state_dict(torch.load(TSRGAN_MODEL_NAME), False)
 
     hr_image = Image.open(hr_path + image_name)
-    bicubic_image = ToTensor()(Image.open(bicubic_path + image_name))
 
     lr_scale = Resize(CROP_SIZE // UPSCALE_FACTOR, interpolation=Image.BICUBIC)
+    bicubic_scale = Resize(CROP_SIZE, interpolation=Image.BICUBIC)
     lr_image = lr_scale(hr_image)
+    bicubic_image = bicubic_scale(lr_image)
 
     lr_image = Variable(ToTensor()(lr_image), volatile=True).unsqueeze(0)
     hr_image = Variable(ToTensor()(hr_image), volatile=True).unsqueeze(0)
-    bicubic_image = Variable(bicubic_image, volatile=True).unsqueeze(0)
+    bicubic_image = Variable(ToTensor()(bicubic_image), volatile=True).unsqueeze(0)
 
     # srcnn_image = Variable(srcnn_image, volatile=True).unsqueeze(0)
     # srgan_image = Variable(srgan_image, volatile=True).unsqueeze(0)

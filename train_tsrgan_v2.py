@@ -14,7 +14,7 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss.loss_new import GeneratorLoss
-from model.model import Generator
+from model.model_tsrgan import Generator_TSRGAN
 from model.model_transformer import ViT
 
 
@@ -22,25 +22,25 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 30
-    EPOCH_SUM = 50
+    NUM_EPOCHS = 10
+    EPOCH_SUM = 0
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_50.pth'
-    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_50.pth'
+    # MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_50.pth'
+    # MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_50.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14000/val', upscale_factor=UPSCALE_FACTOR)
-    #
-    # train_set = TrainDatasetFromFolder('../data_14000/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14000/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+
+    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     train_loader = DataLoader(dataset=train_set, num_workers=4, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(dataset=val_set, num_workers=4, batch_size=1, shuffle=False)
 
-    netG = Generator(UPSCALE_FACTOR)
+    netG = Generator_TSRGAN(UPSCALE_FACTOR)
     print('# generator parameters:', sum(param.numel() for param in netG.parameters()))
     netD = ViT(
         image_size=128,
@@ -71,13 +71,13 @@ if __name__ == '__main__':
         generator_criterion.cuda()
         # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-        netG.load_state_dict(torch.load(MODEL_NAME_G), False)
-        netD.load_state_dict(torch.load(MODEL_NAME_D), False)
-    else:
-        netG.load_state_dict(torch.load(MODEL_NAME_G, map_location=lambda storage, loc: storage))
-        netD.load_state_dict(torch.load(MODEL_NAME_D, map_location=lambda storage, loc: storage))
-        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        # netG.load_state_dict(torch.load(MODEL_NAME_G), False)
+        # netD.load_state_dict(torch.load(MODEL_NAME_D), False)
+    # else:
+    #     netG.load_state_dict(torch.load(MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    #     netD.load_state_dict(torch.load(MODEL_NAME_D, map_location=lambda storage, loc: storage))
+    #     # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    #     # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -208,5 +208,5 @@ if __name__ == '__main__':
             data_frame = pd.DataFrame(
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
-                index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'tsrgan_v2_srf_' + str(UPSCALE_FACTOR) + F'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+                index=range(1, epoch+ 1))
+            data_frame.to_csv(out_path + 'tsrgan_v2_srf_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')

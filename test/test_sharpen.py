@@ -4,11 +4,16 @@ import numpy as np
 
 def custom_blur_demo(image):
     kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], np.float32)  # 锐化
+    # kernel = np.array([[-1, -1, -1, -1, -1],
+    #                    [-1,  2,  2,  2, -1],
+    #                    [-1,  2,  8,  2, -1],
+    #                    [-1,  2,  2,  2, -1],
+    #                    [-1, -1, -1, -1, -1]], np.float32)  # 锐化
     dst = cv.filter2D(image, -1, kernel=kernel)
     cv.imshow("custom_blur_demo", dst)
 
 
-PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/data_13985_compared.png'
+PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/data_5345_compared.png'
 
 src = cv.imread(PATH)
 cv.namedWindow("input image", cv.WINDOW_AUTOSIZE)
