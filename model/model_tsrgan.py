@@ -26,7 +26,6 @@ class Generator_TSRGAN(nn.Module):
         block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
         self.block8 = nn.Sequential(*block8)
 
-
     def forward(self, x):
 
         block1 = self.block1(x)

@@ -81,7 +81,7 @@ if __name__ == '__main__':
     data_frame = pd.DataFrame(
         data={'PSNR': psnr_set, 'SSIM': ssim_set},
         index=range(1, epoch_sum))
-    data_frame.to_csv(out_path + 'tsrgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+    data_frame.to_csv(out_path + 'tsrgan_v2_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
 
     x = range(1, epoch_sum)
 
