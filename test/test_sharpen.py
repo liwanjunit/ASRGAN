@@ -10,10 +10,10 @@ def custom_blur_demo(image):
     #                    [-1,  2,  2,  2, -1],
     #                    [-1, -1, -1, -1, -1]], np.float32)  # 锐化
     dst = cv.filter2D(image, -1, kernel=kernel)
-    cv.imshow("custom_blur_demo", dst)
+    cv.imshow("sharpen", dst)
 
 
-PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/data_5345_compared.png'
+PATH = 'C:/code/ASRGAN/ASRGAN-master/test_image/compared/data_13985_compared.png'
 
 src = cv.imread(PATH)
 cv.namedWindow("input image", cv.WINDOW_AUTOSIZE)
