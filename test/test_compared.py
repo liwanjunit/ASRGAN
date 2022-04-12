@@ -31,7 +31,7 @@ if __name__ == '__main__':
     tsrgan_v2_psnr_sum = []
     tsrgan_v2_ssim_sum = []
 
-    for i in range(len(srgan_data.head(179)['PSNR'])):
+    for i in range(len(srgan_data.head(50)['PSNR'])):
 
         bicubic_psnr_sum.append(bicubic_data['PSNR'][i*1])
         bicubic_ssim_sum.append(bicubic_data['SSIM'][i*1])
@@ -45,10 +45,10 @@ if __name__ == '__main__':
         tsrgan_psnr_sum.append(tsrgan_data['PSNR'][i*1])
         tsrgan_ssim_sum.append(tsrgan_data['SSIM'][i*1])
 
-        # tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][i])sas
-        # tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][i])
+        tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][i])
+        tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][i])
 
-    x = range(1, len(srgan_data.head(179)['PSNR'])+1)
+    x = range(1, len(srgan_data.head(50)['PSNR'])+1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     plt.plot(x, srcnn_psnr_sum, color='g', linestyle=':', label='SRCNN')
     plt.plot(x, srgan_psnr_sum, color='r', linestyle='-.', label='SRGAN')
     plt.plot(x, tsrgan_psnr_sum, color='b', linestyle='-', label='TSRGAN')
-    # plt.plot(x, tsrgan_v2_psnr_sum, color='y', linestyle='-', label='TSRGAN_v2')
+    plt.plot(x, tsrgan_v2_psnr_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.xlabel('EPOCH')
     plt.ylabel('PSNR')
     plt.legend(loc='center right')
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     plt.plot(x, srcnn_ssim_sum, color='g', linestyle=':', label='SRCNN')
     plt.plot(x, srgan_ssim_sum, color='r', linestyle='-.', label='SRGAN')
     plt.plot(x, tsrgan_ssim_sum, color='b', linestyle='-', label='TSRGAN')
-    # plt.plot(x, tsrgan_v2_ssim_sum, color='y', linestyle='-', label='TSRGAN_v2')
+    plt.plot(x, tsrgan_v2_ssim_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.xlabel('EPOCH')
     plt.ylabel('SSIM')
     # plt.ylim(ymin=0.3, ymax=0.95)

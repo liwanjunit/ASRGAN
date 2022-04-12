@@ -22,15 +22,15 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 20
-    EPOCH_SUM = 50
+    NUM_EPOCHS = 15
+    EPOCH_SUM = 70
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_50.pth'
-    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_50.pth'
+    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_70.pth'
+    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_70.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
