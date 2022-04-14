@@ -14,20 +14,20 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from model.model import Generator
+from model.model_srcnn import SRCNN
 
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 100
-    EPOCH_SUM = 100
+    NUM_EPOCHS = 200
+    EPOCH_SUM = 0
 
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME = 'srresnet_epoch_4_100.pth'
+    # MODEL_NAME = 'srcnn_epoch_4_100.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     train_loader = DataLoader(dataset=train_set, num_workers=4, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(dataset=val_set, num_workers=4, batch_size=1, shuffle=False)
 
-    model = Generator(UPSCALE_FACTOR)
+    model = SRCNN()
     print('# generator parameters:', sum(param.numel() for param in model.parameters()))
 
     loss_function = nn.MSELoss()
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
-    else:
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
+    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
+    # else:
+    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(model.parameters(), lr=G_INIT_LR)
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
             train_bar.set_description(desc='[%d/%d]Loss: %.4f ' % (epoch, NUM_EPOCHS, running_results['loss'] / running_results['batch_sizes']))
 
         model.eval()
-        out_path = 'training_results/srgan_SRF_' + str(UPSCALE_FACTOR) + '/'
+        out_path = 'training_results/srcnn_SRF_' + str(UPSCALE_FACTOR) + '/'
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
             for val_lr, val_hr_restore, val_hr in val_bar:
                 batch_size = val_lr.size(0)
                 valing_results['batch_sizes'] += batch_size
-                lr = val_lr
+                lr = val_hr_restore
                 hr = val_hr
                 if torch.cuda.is_available():
                     lr = lr.cuda()
@@ -111,7 +111,7 @@ if __name__ == '__main__':
 
                 if image_index == 343:
                     sr_image = ToPILImage()(sr[0].data.cpu())
-                    sr_image.save('test_image/results/' + 'srresnet_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+                    sr_image.save('test_image/results/' + 'srcnn_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
                 image_index += 1
 
@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
-            torch.save(model.state_dict(), 'epochs/srresnet_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(model.state_dict(), 'epochs/srcnn_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
         # save loss\scores\psnr\ssim
         results['loss'].append(running_results['loss'] / running_results['batch_sizes'])
@@ -153,4 +153,4 @@ if __name__ == '__main__':
             data_frame = pd.DataFrame(
                 data={'Loss': results['loss'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'srresnet_train_' + str(UPSCALE_FACTOR) + f'_{epoch + EPOCH_SUM}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'srcnn_train_' + str(UPSCALE_FACTOR) + f'_{epoch + EPOCH_SUM}.csv', index_label='Epoch')
