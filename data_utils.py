@@ -59,8 +59,8 @@ class TrainDatasetFromFolder(Dataset):
         hr_image = self.hr_transform(Image.open(self.image_filenames[index]))
         lr_image = self.lr_transform(hr_image)
         bicubic_image = self.bicubic_transform(lr_image)
-        # return bicubic_image, hr_image
-        return lr_image, hr_image
+        return bicubic_image, hr_image
+        # return lr_image, hr_image
 
     def __len__(self):
         return len(self.image_filenames)

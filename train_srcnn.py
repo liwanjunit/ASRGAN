@@ -20,11 +20,11 @@ from model.model_srcnn import SRCNN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
     NUM_EPOCHS = 200
     EPOCH_SUM = 0
 
-    G_INIT_LR = 0.0001
+    INIT_LR = 0.0001
     BATCH_SIZE = 2
 
     # MODEL_NAME = 'srcnn_epoch_4_100.pth'
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # else:
     #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
 
-    optimizerG = optim.Adam(model.parameters(), lr=G_INIT_LR)
+    optimizerG = optim.Adam(model.parameters(), lr=INIT_LR)
 
     results = {'loss': [], 'psnr': [], 'ssim': []}
 
