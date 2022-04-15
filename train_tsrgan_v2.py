@@ -22,15 +22,15 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 20
-    EPOCH_SUM = 165
+    NUM_EPOCHS = 15
+    EPOCH_SUM = 185
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_165.pth'
-    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_165.pth'
+    MODEL_NAME_G = '/kaggle/input/sr-model/tsrgan_v2_netG_epoch_4_185.pth'
+    MODEL_NAME_D = '/kaggle/input/sr-model/tsrgan_v2_netD_epoch_4_185.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -209,4 +209,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch+ 1))
-            data_frame.to_csv(out_path + 'tsrgan_v2_srf_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'tsrgan_v2_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
