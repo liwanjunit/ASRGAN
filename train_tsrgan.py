@@ -18,17 +18,18 @@ from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 8
     NUM_EPOCHS = 30
     EPOCH_SUM = 0
-    BATCH_SIZE = 1
+    BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = 'tsrgan_netG_epoch_4_185.pth'
-    # MODEL_NAME_D = 'tsrgan_netD_epoch_4_185.pth'
+    # MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
 
+    print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
