@@ -22,13 +22,13 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 8
     NUM_EPOCHS = 100
-    EPOCH_SUM = 0
+    EPOCH_SUM = 100
 
     INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    # MODEL_NAME = 'srcnn_epoch_4_100.pth'
-    
+    MODEL_NAME = '/kaggle/input/sr-model/srcnn_epoch_4_100.pth'
+
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -54,9 +54,9 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
-    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
-    # else:
-    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
+        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
+    else:
+        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(model.parameters(), lr=INIT_LR)
 
