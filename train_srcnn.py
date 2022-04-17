@@ -28,7 +28,8 @@ if __name__ == '__main__':
     BATCH_SIZE = 2
 
     # MODEL_NAME = 'srcnn_epoch_4_100.pth'
-
+    
+    print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
