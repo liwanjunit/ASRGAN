@@ -22,17 +22,18 @@ if __name__ == '__main__':
     ssl._create_default_https_context = ssl._create_unverified_context
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 20
-    EPOCH_SUM = 180
+    UPSCALE_FACTOR = 8
+    NUM_EPOCHS = 30
+    EPOCH_SUM = 120
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME_G = 'srgan_netG_epoch_4_180.pth'
-    MODEL_NAME_D = 'srgan_netD_epoch_4_180.pth'
+    MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_120.pth'
+    MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_120.pth'
 
+    print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 
         netG.train()
         netD.train()
-        for data, target in train_bar:
+        for data, _, target in train_bar:
             g_update_first = True
             batch_size = data.size(0)
             running_results['batch_sizes'] += batch_size
@@ -195,4 +196,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'srgan_srf_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'srgan_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')

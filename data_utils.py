@@ -92,8 +92,8 @@ class ValDatasetFromFolder(Dataset):
 class TestDatasetFromFolder(Dataset):
     def __init__(self, dataset_dir):
         super(TestDatasetFromFolder, self).__init__()
-        self.lr_path = dataset_dir + '/data/'
-        # self.lr_path = dataset_dir + '/bicubic/'
+        # self.lr_path = dataset_dir + '/data/'
+        self.lr_path = dataset_dir + '/bicubic/'
         self.hr_path = dataset_dir + '/target/'
         self.lr_filenames = [join(self.lr_path, x) for x in listdir(self.lr_path) if is_image_file(x)]
         self.hr_filenames = [join(self.hr_path, x) for x in listdir(self.hr_path) if is_image_file(x)]

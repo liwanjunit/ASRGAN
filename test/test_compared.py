@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    bicubic_path = 'C:/code/train_results/new_model/bicubic_test_4.csv'
-    srcnn_path = 'C:/code/train_results/new_model/srcnn_test_4.csv'
-    srresnet_path = 'C:/code/train_results/new_model/srresnet_x4/srresnet_test_4.csv'
-    srgan_path = 'C:/code/train_results/new_model/srgan_x4/srgan_test_4.csv'
-    tsrgan_path = 'C:/code/train_results/new_model/tsrgan_x4/tsrgan_test_4.csv'
-    tsrgan_v2_path = 'C:/code/train_results/new_model/tsrgan_v2_x4/tsrgan_v2_test_4.csv'
+    UPSCALE_FACTOR = 8
+
+    bicubic_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/bicubic_test_{UPSCALE_FACTOR}.csv'
+    srcnn_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/srcnn_test_{UPSCALE_FACTOR}.csv'
+    srresnet_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/srresnet_test_{UPSCALE_FACTOR}.csv'
+    srgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/srgan_test_{UPSCALE_FACTOR}.csv'
+    tsrgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/tsrgan_test_{UPSCALE_FACTOR}.csv'
+    tsrgan_v2_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/tsrgan_v2_test_{UPSCALE_FACTOR}.csv'
 
     bicubic_data = pd.read_csv(bicubic_path)
     srcnn_data = pd.read_csv(srcnn_path)
@@ -36,27 +38,27 @@ if __name__ == '__main__':
     tsrgan_v2_psnr_sum = []
     tsrgan_v2_ssim_sum = []
 
-    for i in range(len(srgan_data.head(150)['PSNR'])):
+    for i in range(7):
 
-        bicubic_psnr_sum.append(bicubic_data['PSNR'][i*1])
-        bicubic_ssim_sum.append(bicubic_data['SSIM'][i*1])
+        bicubic_psnr_sum.append(bicubic_data['PSNR'][(i+1)*20])
+        bicubic_ssim_sum.append(bicubic_data['SSIM'][(i+1)*20])
 
-        srcnn_psnr_sum.append(srcnn_data['PSNR'][i*1])
-        srcnn_ssim_sum.append(srcnn_data['SSIM'][i*1])
+        srcnn_psnr_sum.append(srcnn_data['PSNR'][(i+1)*20])
+        srcnn_ssim_sum.append(srcnn_data['SSIM'][(i+1)*20])
 
-        srresnet_psnr_sum.append(srresnet_data['PSNR'][i*1])
-        srresnet_ssim_sum.append(srresnet_data['SSIM'][i*1])
+        srresnet_psnr_sum.append(srresnet_data['PSNR'][(i+1)*20])
+        srresnet_ssim_sum.append(srresnet_data['SSIM'][(i+1)*20])
 
-        srgan_psnr_sum.append(srgan_data['PSNR'][i*1])
-        srgan_ssim_sum.append(srgan_data['SSIM'][i*1])
+        srgan_psnr_sum.append(srgan_data['PSNR'][(i+1)*20])
+        srgan_ssim_sum.append(srgan_data['SSIM'][(i+1)*20])
 
-        tsrgan_psnr_sum.append(tsrgan_data['PSNR'][i*1])
-        tsrgan_ssim_sum.append(tsrgan_data['SSIM'][i*1])
+        tsrgan_psnr_sum.append(tsrgan_data['PSNR'][(i+1)*20])
+        tsrgan_ssim_sum.append(tsrgan_data['SSIM'][(i+1)*20])
 
-        tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][i])
-        tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][i])
+        tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][(i+1)*20])
+        tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][(i+1)*20])
 
-    x = range(1, len(srgan_data.head(150)['PSNR'])+1)
+    x = range(1, 7 + 1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)

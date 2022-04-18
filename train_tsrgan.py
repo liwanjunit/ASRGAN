@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder
-from loss.loss_new import GeneratorLoss
+from loss.loss_new import GeneratorLoss_NEW
 from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
@@ -26,19 +26,19 @@ if __name__ == '__main__':
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
-    # MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_G = f'tsrgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_D = f'tsrgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
@@ -51,7 +51,7 @@ if __name__ == '__main__':
     netD = Discriminator_TSRGAN()
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
-    generator_criterion = GeneratorLoss()
+    generator_criterion = GeneratorLoss_NEW()
 
     if torch.cuda.is_available():
         netG.cuda()

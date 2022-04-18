@@ -18,9 +18,9 @@ from model.model_srcnn import SRCNN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 8
 
-    TEST_DIR = '../data/test_x4'
+    TEST_DIR = f'../data/test_x{UPSCALE_FACTOR}'
 
     epoch_sum = 1
 
@@ -37,11 +37,10 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        # MODEL_NAME = f'C:/code/train_results/model/t_x4/G/tsrgan_netG_epoch_4_{i+30}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_x4/G/tsrgan_netG_epoch_4_{i+185}.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/srcnn_x4/model/srcnn_epoch_4_{i+1}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/tsrgan_v2_x4/G/tsrgan_v2_netG_epoch_4_{i+50}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/srresnet_x4/model/srresnet_epoch_4_{ i + 100 }.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_{i+185}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/model/srcnn_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/G/tsrgan_v2_netG_epoch_{UPSCALE_FACTOR}_{i+50}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/model/srresnet_epoch_{UPSCALE_FACTOR}_{ i + 100 }.pth'
 
         # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
         # model = Generator(UPSCALE_FACTOR).eval()

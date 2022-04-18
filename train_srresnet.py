@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
         model.train()
 
-        for data, target in train_bar:
+        for data, _, target in train_bar:
 
             g_update_first = True
             batch_size = data.size(0)

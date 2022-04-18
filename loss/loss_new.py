@@ -3,9 +3,9 @@ from torch import nn
 from torchvision.models.vgg import vgg16
 
 
-class GeneratorLoss(nn.Module):
+class GeneratorLoss_NEW(nn.Module):
     def __init__(self):
-        super(GeneratorLoss, self).__init__()
+        super(GeneratorLoss_NEW, self).__init__()
         vgg = vgg16(pretrained=True)
         # loss_network = nn.Sequential(*list(vgg.features)[:31]).eval()
         loss_network = nn.Sequential(*list(vgg.features)[:35]).eval()
@@ -64,5 +64,5 @@ class L1_Charbonnier_loss(torch.nn.Module):
 
 
 if __name__ == "__main__":
-    g_loss = GeneratorLoss()
+    g_loss = GeneratorLoss_NEW()
     print(g_loss)

@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
         netG.train()
         netD.train()
-        for data, target in train_bar:
+        for data, _, target in train_bar:
             g_update_first = True
             batch_size = data.size(0)
             running_results['batch_sizes'] += batch_size

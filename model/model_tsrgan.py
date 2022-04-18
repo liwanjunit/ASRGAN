@@ -20,7 +20,6 @@ class Generator_TSRGAN(nn.Module):
         self.block6 = ResidualBlock(64)
         self.block7 = nn.Sequential(
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
-            # nn.BatchNorm2d(64)
         )
         block8 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
         block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
@@ -90,17 +89,15 @@ class ResidualBlock(nn.Module):
     def __init__(self, channels):
         super(ResidualBlock, self).__init__()
         self.conv1 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
-        # self.bn1 = nn.BatchNorm2d(channels)
         self.prelu = nn.PReLU()
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
-        # self.bn2 = nn.BatchNorm2d(channels)
+
 
         self.attention = Attention(dim=64)
         self.block_c = nn.Sequential(
             nn.Conv2d(3, 8, kernel_size=3, padding=1),
             nn.PReLU()
         )
-        # self.norm = nn.LayerNorm([64, 32, 32])
 
     def forward(self, x):
 
