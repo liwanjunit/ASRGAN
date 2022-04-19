@@ -31,20 +31,21 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(200):
+    for i in range(175):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_{i+185}.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/model/srcnn_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/G/tsrgan_v2_netG_epoch_{UPSCALE_FACTOR}_{i+50}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/model/srcnn_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
         # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/model/srresnet_epoch_{UPSCALE_FACTOR}_{ i + 100 }.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/G/srgan_netG_epoch_{UPSCALE_FACTOR}_{i+185}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_{i+185}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/G/tsrgan_v2_netG_epoch_{UPSCALE_FACTOR}_{i+50}.pth'
 
         # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-        # model = Generator(UPSCALE_FACTOR).eval()
-        model = SRCNN().eval()
+        model = Generator(UPSCALE_FACTOR).eval()
+        # model = SRCNN().eval()
         if torch.cuda.is_available():
             model = model.cuda()
         model.load_state_dict(torch.load(MODEL_NAME), False)
@@ -85,9 +86,11 @@ if __name__ == '__main__':
     data_frame = pd.DataFrame(
         data={'PSNR': psnr_set, 'SSIM': ssim_set},
         index=range(1, epoch_sum))
-    data_frame.to_csv(out_path + 'tsrgan_v2_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
     # data_frame.to_csv(out_path + 'srcnn_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
     # data_frame.to_csv(out_path + 'srresnet_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+    data_frame.to_csv(out_path + 'srgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+    # data_frame.to_csv(out_path + 'tsrgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+    # data_frame.to_csv(out_path + 'tsrgan_v2_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
 
     x = range(1, epoch_sum)
 
