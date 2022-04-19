@@ -17,7 +17,7 @@ from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
 
-    CROP_SIZE = 128
+    CROP_SIZE = 256
     UPSCALE_FACTOR = 8
     NUM_EPOCHS = 30
     EPOCH_SUM = 0
