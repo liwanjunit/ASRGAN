@@ -92,7 +92,6 @@ class ResidualBlock(nn.Module):
         self.prelu = nn.PReLU()
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
 
-
         self.attention = Attention(dim=64)
         self.block_c = nn.Sequential(
             nn.Conv2d(3, 8, kernel_size=3, padding=1),
@@ -102,12 +101,9 @@ class ResidualBlock(nn.Module):
     def forward(self, x):
 
         residual = self.conv1(x)
-        # residual = self.bn1(residual)
         residual = self.prelu(residual)
         residual = self.attention(residual)
-        # residual = self.norm(residual)
         # residual = self.conv2(residual)
-        # residual = self.bn2(residual)
 
         return x + residual
 
