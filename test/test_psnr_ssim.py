@@ -22,6 +22,12 @@ if __name__ == '__main__':
 
     TEST_DIR = f'../data/test_x{UPSCALE_FACTOR}'
 
+    # MODEL = 'srcnn'
+    # MODEL = 'srresnet'
+    MODEL = 'srgan'
+    # MODEL = 'tsrgan'
+    # MODEL = 'tsrgan_v2'
+
     epoch_sum = 1
 
     psnr_set = []
@@ -37,11 +43,7 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/model/srcnn_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/model/srresnet_epoch_{UPSCALE_FACTOR}_{ i + 100 }.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/G/srgan_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_{i+185}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/G/tsrgan_v2_netG_epoch_{UPSCALE_FACTOR}_{i+50}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
 
         # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
         model = Generator(UPSCALE_FACTOR).eval()
@@ -86,11 +88,7 @@ if __name__ == '__main__':
     data_frame = pd.DataFrame(
         data={'PSNR': psnr_set, 'SSIM': ssim_set},
         index=range(1, epoch_sum))
-    # data_frame.to_csv(out_path + 'srcnn_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
-    # data_frame.to_csv(out_path + 'srresnet_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
-    data_frame.to_csv(out_path + 'srgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
-    # data_frame.to_csv(out_path + 'tsrgan_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
-    # data_frame.to_csv(out_path + 'tsrgan_v2_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
+    data_frame.to_csv(out_path + f'{MODEL}_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
 
     x = range(1, epoch_sum)
 
