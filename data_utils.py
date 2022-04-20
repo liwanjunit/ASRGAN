@@ -59,7 +59,6 @@ class TrainDatasetFromFolder(Dataset):
         hr_image = self.hr_transform(Image.open(self.image_filenames[index]))
         lr_image = self.lr_transform(hr_image)
         bicubic_image = self.bicubic_transform(lr_image)
-        # return bicubic_image, hr_image
         return lr_image, bicubic_image, hr_image
 
     def __len__(self):
@@ -92,8 +91,8 @@ class ValDatasetFromFolder(Dataset):
 class TestDatasetFromFolder(Dataset):
     def __init__(self, dataset_dir):
         super(TestDatasetFromFolder, self).__init__()
-        # self.lr_path = dataset_dir + '/data/'
-        self.lr_path = dataset_dir + '/bicubic/'
+        self.lr_path = dataset_dir + '/data/'
+        # self.lr_path = dataset_dir + '/bicubic/'
         self.hr_path = dataset_dir + '/target/'
         self.lr_filenames = [join(self.lr_path, x) for x in listdir(self.lr_path) if is_image_file(x)]
         self.hr_filenames = [join(self.hr_path, x) for x in listdir(self.hr_path) if is_image_file(x)]
