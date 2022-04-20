@@ -18,14 +18,14 @@ from model.model_srcnn import SRCNN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 2
 
     TEST_DIR = f'../data/test_x{UPSCALE_FACTOR}'
 
     # MODEL = 'srcnn'
     # MODEL = 'srresnet'
-    MODEL = 'srgan'
-    # MODEL = 'tsrgan'
+    # MODEL = 'srgan'
+    MODEL = 'tsrgan'
     # MODEL = 'tsrgan_v2'
 
     epoch_sum = 1
@@ -37,7 +37,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(200):
+    for i in range(5):
 
         index = 1
         psnr_sum = 0
@@ -45,8 +45,8 @@ if __name__ == '__main__':
 
         MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
 
-        # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-        model = Generator(UPSCALE_FACTOR).eval()
+        model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
+        # model = Generator(UPSCALE_FACTOR).eval()
         # model = SRCNN().eval()
         if torch.cuda.is_available():
             model = model.cuda()
@@ -59,6 +59,8 @@ if __name__ == '__main__':
                 image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
                 hr_image = Variable(hr_image, volatile=True)
+
+                print(lr_image.shape)
 
                 if torch.cuda.is_available():
                     lr_image = lr_image.cuda()
