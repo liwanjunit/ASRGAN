@@ -77,7 +77,7 @@ class ValDatasetFromFolder(Dataset):
         w, h = hr_image.size
         crop_size = calculate_valid_crop_size(min(w, h), self.upscale_factor)
         # crop_size = calculate_valid_crop_size(self.crop_size, self.upscale_factor)
-        crop_size = 88
+        # crop_size = 88
         lr_scale = Resize(crop_size // self.upscale_factor, interpolation=Image.BICUBIC)
         hr_scale = Resize(crop_size, interpolation=Image.BICUBIC)
         hr_image = CenterCrop(crop_size)(hr_image)
