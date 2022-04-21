@@ -23,10 +23,15 @@ class Attention(nn.Module):
 
 		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
 		qkv = self.qkv(x)
+		print('qkv.shape： ', qkv.shape)
 		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=8, s=8).permute(2, 0, 3, 1, 4)
 		q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
 
-		attn = (q @ k.transpose(-2, -1)) * self.scale
+		print('q.shape： ', q.shape)
+		print('k.shape： ', k.shape)
+		print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
+
+		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 		attn = attn.softmax(dim=-1)
 		attn = self.attn_drop(attn)
 

@@ -18,7 +18,7 @@ from model.model_srcnn import SRCNN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 2
 
     TEST_DIR = f'../data/test_x{UPSCALE_FACTOR}'
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+100}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
 
         model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
         # model = Generator(UPSCALE_FACTOR).eval()
