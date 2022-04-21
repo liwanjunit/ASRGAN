@@ -21,7 +21,7 @@ if __name__ == '__main__':
     UPSCALE_FACTOR = 8
     NUM_EPOCHS = 25
     EPOCH_SUM = 150
-    BATCH_SIZE = 1
+    BATCH_SIZE = 2
 
     D_INIT_LR = 0.000001
     G_INIT_LR = 0.0001
