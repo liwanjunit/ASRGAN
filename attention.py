@@ -19,17 +19,21 @@ class Attention(nn.Module):
 	def forward(self, x):
 
 		B, C, H, W = x.shape
+		# print('x.shape： ', x.shape)
 		x = rearrange(x, 'b c h w -> b (h w) c')
+		# print('x.shape： ', x.shape)
 
 		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
 		qkv = self.qkv(x)
-		print('qkv.shape： ', qkv.shape)
+		# print('qkv.shape： ', qkv.shape)
 		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=8, s=8).permute(2, 0, 3, 1, 4)
 		q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
 
-		print('q.shape： ', q.shape)
-		print('k.shape： ', k.shape)
-		print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
+		# print('q.shape： ', q.shape)
+		# print('k.shape： ', k.shape)
+		# print('v.shape： ', v.shape)
+		# print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
+		# # assert False
 
 		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 		attn = attn.softmax(dim=-1)
