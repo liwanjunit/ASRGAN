@@ -34,6 +34,7 @@ class Attention(nn.Module):
 		# print('v.shape： ', v.shape)
 		# print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
 		# # assert False
+		# torch.cuda.empty_cache()
 
 		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 		attn = attn.softmax(dim=-1)
