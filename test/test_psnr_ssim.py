@@ -11,7 +11,7 @@ import pandas as pd
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import pytorch_ssim
-from data_utils import TestDatasetFromFolder, display_transform
+from data_utils import TestDatasetFromFolder, display_transform, ValDatasetFromFolder
 from model.model_tsrgan import Generator_TSRGAN
 from model.model import Generator
 from model.model_srcnn import SRCNN
@@ -34,6 +34,7 @@ if __name__ == '__main__':
     ssim_set = []
 
     test_set = TestDatasetFromFolder(TEST_DIR)
+    # val_set = ValDatasetFromFolder('C:/code/ASRGAN/data_17500/val', upscale_factor=UPSCALE_FACTOR)
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
@@ -43,7 +44,7 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
+        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+100}.pth'
 
         model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
         # model = Generator(UPSCALE_FACTOR).eval()
@@ -55,10 +56,13 @@ if __name__ == '__main__':
         with torch.no_grad():
 
             for image_name, lr_image, hr_image in test_bar:
+            # for val_lr, val_hr_restore, val_hr in test_bar:
 
                 image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
                 hr_image = Variable(hr_image, volatile=True)
+                # lr_image = Variable(val_lr, volatile=True)
+                # hr_image = Variable(val_hr, volatile=True)
 
                 # print(lr_image.shape)
 
