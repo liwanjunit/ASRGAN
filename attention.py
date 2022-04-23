@@ -40,7 +40,7 @@ class Attention(nn.Module):
 		attn = attn.softmax(dim=-1)
 		attn = self.attn_drop(attn)
 
-		x = (attn @ v).transpose(1, 2)
+		x = torch.matmul(attn, v).transpose(1, 2)
 		x = rearrange(x, 'b h a c -> b h (a c)')
 		x = self.proj(x)
 		x = self.proj_drop(x)
