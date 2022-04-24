@@ -13,13 +13,14 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder
 from loss.loss_new import GeneratorLoss_NEW
+from loss.loss import GeneratorLoss
 from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 5
+    UPSCALE_FACTOR = 4
+    NUM_EPOCHS = 10
     EPOCH_SUM = 0
     BATCH_SIZE = 2
 
@@ -34,11 +35,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    # train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
 
-    train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('../input/input0/data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('../input/input0/data_17500/val', upscale_factor=UPSCALE_FACTOR)
@@ -51,7 +52,7 @@ if __name__ == '__main__':
     netD = Discriminator_TSRGAN()
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
-    generator_criterion = GeneratorLoss_NEW()
+    generator_criterion = GeneratorLoss()
 
     if torch.cuda.is_available():
         netG.cuda()
@@ -146,11 +147,11 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 343:
-                    sr_image = ToPILImage()(sr[0].data.cpu())
-                    sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
-
-                image_index += 1
+                # if image_index == 343:
+                #     sr_image = ToPILImage()(sr[0].data.cpu())
+                #     sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+                #
+                # image_index += 1
 
                 batch_mse = ((sr - hr) ** 2).data.mean()
                 valing_results['mse'] += batch_mse * batch_size
