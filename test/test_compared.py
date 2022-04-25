@@ -70,7 +70,7 @@ if __name__ == '__main__':
     plt.plot(x, tsrgan_psnr_sum, color='b', linestyle='-', label='TSRGAN')
     # plt.plot(x, tsrgan_v2_psnr_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.xlabel('EPOCH')
-    plt.ylabel('PSNR')
+    plt.ylabel('PSNR(dB)')
     plt.legend(loc='center right')
 
     plt.figure(2)
