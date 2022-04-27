@@ -12,33 +12,33 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder
-from loss.loss_new import GeneratorLoss_NEW
+from loss.loss import GeneratorLoss
 from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 5
-    EPOCH_SUM = 0
-    BATCH_SIZE = 1
+    UPSCALE_FACTOR = 4
+    NUM_EPOCHS = 25
+    EPOCH_SUM = 150
+    BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'tsrgan_netG_epoch_{UPSCALE_FACTOR}_150.pth'
-    # MODEL_NAME_D = f'tsrgan_netD_epoch_{UPSCALE_FACTOR}_150.pth'
+    MODEL_NAME_G = f'tsrgan_mse_netG_epoch_{UPSCALE_FACTOR}_150.pth'
+    MODEL_NAME_D = f'tsrgan_mse_netD_epoch_{UPSCALE_FACTOR}_150.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    # train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
 
-    train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('../input/input0/data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('../input/input0/data_17500/val', upscale_factor=UPSCALE_FACTOR)
@@ -51,17 +51,17 @@ if __name__ == '__main__':
     netD = Discriminator_TSRGAN()
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
-    generator_criterion = GeneratorLoss_NEW()
+    generator_criterion = GeneratorLoss()
 
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
         generator_criterion.cuda()
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    # else:
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -180,8 +180,8 @@ if __name__ == '__main__':
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
-            torch.save(netG.state_dict(), 'epochs/tsrgan_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
-            torch.save(netD.state_dict(), 'epochs/tsrgan_netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(netG.state_dict(), 'epochs/tsrgan_mse_netG_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+            torch.save(netD.state_dict(), 'epochs/tsrgan_mse_netD_epoch_%d_%d.pth' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
         # save loss\scores\psnr\ssim
         results['d_loss'].append(running_results['d_loss'] / running_results['batch_sizes'])
@@ -197,4 +197,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'tsrgan_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'tsrgan_mse_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
