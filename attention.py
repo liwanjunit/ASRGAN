@@ -21,6 +21,7 @@ class Attention(nn.Module):
 		B, C, H, W = x.shape
 		# print('x.shape： ', x.shape)
 		x = rearrange(x, 'b c h w -> b (h w) c')
+		# x = x.reshape(B, H*W, C)
 		# print('x.shape： ', x.shape)
 
 		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
@@ -33,19 +34,25 @@ class Attention(nn.Module):
 		# print('k.shape： ', k.shape)
 		# print('v.shape： ', v.shape)
 		# print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
-		# # assert False
-		# torch.cuda.empty_cache()
+		# assert False
 
 		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
 		attn = attn.softmax(dim=-1)
 		attn = self.attn_drop(attn)
 
 		x = torch.matmul(attn, v).transpose(1, 2)
+		# print(x.shape)
 		x = rearrange(x, 'b h a c -> b h (a c)')
+		# x = x.reshape(B, H*W, C)
+		# print(x.shape)
+		# assert False
+
 		x = self.proj(x)
 		x = self.proj_drop(x)
 		x = rearrange(x, 'b (h w) c -> b c h w', h=H, w=W)
+		# x = x.reshape(B, C, H, W)
 		# print("x after -->", x.shape)
+		# assert False
 		return x
 
 

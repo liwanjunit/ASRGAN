@@ -17,7 +17,7 @@ from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
 
-    CROP_SIZE = 88
+    CROP_SIZE = 64
     UPSCALE_FACTOR = 2
     NUM_EPOCHS = 5
     EPOCH_SUM = 0
@@ -34,11 +34,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-17500/val', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_17500/val', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('../input/input0/data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('../input/input0/data_17500/val', upscale_factor=UPSCALE_FACTOR)
