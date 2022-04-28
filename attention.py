@@ -3,6 +3,39 @@ import torch.nn as nn
 from einops import rearrange
 
 
+class InterlacedSparseSelfAttention(nn.Module):
+	def __init__(self, dim, P_h, P_w):
+		super().__init__()
+		self.Attention = Attention(dim=dim)
+		self.P_h = P_h
+		self.P_w = P_w
+
+	def forward(self, x):
+		# x：input features with shape [B, C, H, W]
+		# P_h，P_w： Number of partitions along H and W dimension
+
+		P_h = self.P_h
+		P_w = self.P_w
+
+		B, C, H, W = x.size()
+		Q_h, Q_w = H // P_h, W // P_w
+		x = x.reshape(B, C, Q_h, P_h, Q_w, P_w)
+
+		# Long-range Attention
+		x = x.permute(0, 3, 5, 1, 2, 4)
+		x = x.reshape(B * P_h * P_w, C, Q_h, Q_w)
+		x = self.Attention(x)
+		x = x.reshape(B, P_h, P_w, C, Q_h, Q_w)
+
+		# Short-range Attention
+		x = x.permute(0, 4, 5, 3, 1, 2)
+		x = x.reshape(B * Q_h * Q_w, C, P_h, P_w)
+		x = self.Attention(x)
+		x = x.reshape(B, Q_h, Q_w, C, P_h, P_w)
+
+		return x.permute(0, 3, 1, 4, 2, 5).reshape(B, C, H, W)
+
+
 class Attention(nn.Module):
 	def __init__(self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0.):
 		super().__init__()
@@ -17,6 +50,8 @@ class Attention(nn.Module):
 		self.proj_drop = nn.Dropout(proj_drop)
 
 	def forward(self, x):
+
+		# print('--------------')
 
 		B, C, H, W = x.shape
 		# print('x.shape： ', x.shape)
@@ -37,9 +72,10 @@ class Attention(nn.Module):
 		# assert False
 
 		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
+		# print(attn.shape)
 		attn = attn.softmax(dim=-1)
 		attn = self.attn_drop(attn)
-
+		# print(attn.shape)
 		x = torch.matmul(attn, v).transpose(1, 2)
 		# print(x.shape)
 		x = rearrange(x, 'b h a c -> b h (a c)')
@@ -92,3 +128,4 @@ class CrossAttention(nn.Module):
 		x = self.proj(x)
 		x = self.proj_drop(x)
 		return x
+

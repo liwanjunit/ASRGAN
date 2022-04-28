@@ -17,17 +17,17 @@ from model.model_tsrgan import Generator_TSRGAN, Discriminator_TSRGAN
 
 if __name__ == '__main__':
 
-    CROP_SIZE = 64
+    CROP_SIZE = 128
     UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 5
-    EPOCH_SUM = 0
+    NUM_EPOCHS = 35
+    EPOCH_SUM = 15
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'tsrgan_netG_epoch_{UPSCALE_FACTOR}_150.pth'
-    # MODEL_NAME_D = f'tsrgan_netD_epoch_{UPSCALE_FACTOR}_150.pth'
+    MODEL_NAME_G = f'tsrgan_netG_epoch_{UPSCALE_FACTOR}_15.pth'
+    MODEL_NAME_D = f'tsrgan_netD_epoch_{UPSCALE_FACTOR}_15.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -57,11 +57,11 @@ if __name__ == '__main__':
         netG.cuda()
         netD.cuda()
         generator_criterion.cuda()
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    # else:
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -146,11 +146,11 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                # if image_index == 343:
-                #     sr_image = ToPILImage()(sr[0].data.cpu())
-                #     sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
-                #
-                # image_index += 1
+                if image_index == 343:
+                    sr_image = ToPILImage()(sr[0].data.cpu())
+                    sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+
+                image_index += 1
 
                 batch_mse = ((sr - hr) ** 2).data.mean()
                 valing_results['mse'] += batch_mse * batch_size
@@ -197,4 +197,4 @@ if __name__ == '__main__':
                 data={'Loss_D': results['d_loss'], 'Loss_G': results['g_loss'], 'Score_D': results['d_score'],
                       'Score_G': results['g_score'], 'PSNR': results['psnr'], 'SSIM': results['ssim']},
                 index=range(1, epoch + 1))
-            data_frame.to_csv(out_path + 'tsrgan_train_' + str(UPSCALE_FACTOR) + f'_{EPOCH_SUM + epoch}.csv', index_label='Epoch')
+            data_frame.to_csv(out_path + 'tsrgan_train_' + str(UPSCALE_FACTOR) + f'_{epoch + EPOCH_SUM}.csv', index_label='Epoch')

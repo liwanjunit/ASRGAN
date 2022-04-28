@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
-from loss.loss_new import GeneratorLoss
+from loss.loss_new import GeneratorLoss_NEW
 from model.model_tsrgan import Generator_TSRGAN
 from model.model_transformer import ViT
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     )
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
-    generator_criterion = GeneratorLoss()
+    generator_criterion = GeneratorLoss_NEW()
 
     if torch.cuda.is_available():
         netG.cuda()

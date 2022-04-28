@@ -1,7 +1,7 @@
 import math
 import torch
 from torch import nn
-from attention import Attention
+from attention import Attention, InterlacedSparseSelfAttention
 
 
 class Generator_TSRGAN(nn.Module):
@@ -92,7 +92,9 @@ class ResidualBlock(nn.Module):
         self.prelu = nn.PReLU()
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
 
-        self.attention = Attention(dim=64)
+        # self.attention = Attention(dim=64)
+        self.attention = InterlacedSparseSelfAttention(dim=64, P_h=8, P_w=8)
+
         self.block_c = nn.Sequential(
             nn.Conv2d(3, 8, kernel_size=3, padding=1),
             nn.PReLU()
@@ -102,7 +104,7 @@ class ResidualBlock(nn.Module):
 
         residual = self.conv1(x)
         residual = self.prelu(residual)
-        residual = self.attention(residual)
+        residual = self.attention(residual, )
         # residual = self.conv2(residual)
 
         return x + residual

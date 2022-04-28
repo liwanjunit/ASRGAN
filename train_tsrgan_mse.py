@@ -127,7 +127,7 @@ if __name__ == '__main__':
                 running_results['g_score'] / running_results['batch_sizes']))
 
         netG.eval()
-        out_path = 'training_results/tsrgan_SRF_' + str(UPSCALE_FACTOR) + '/'
+        out_path = 'training_results/tsrgan_mse_SRF_' + str(UPSCALE_FACTOR) + '/'
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 
                 # if image_index == 343:
                 #     sr_image = ToPILImage()(sr[0].data.cpu())
-                #     sr_image.save('test_image/results/' + 'tsrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
+                #     sr_image.save('test_image/results/' + 'tsrgan_mse_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
                 #
                 # image_index += 1
 

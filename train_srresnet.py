@@ -90,7 +90,7 @@ if __name__ == '__main__':
             train_bar.set_description(desc='[%d/%d]Loss: %.4f ' % (epoch, NUM_EPOCHS, running_results['loss'] / running_results['batch_sizes']))
 
         model.eval()
-        out_path = 'training_results/srgan_SRF_' + str(UPSCALE_FACTOR) + '/'
+        out_path = 'training_results/srresnet_SRF_' + str(UPSCALE_FACTOR) + '/'
         if not os.path.exists(out_path):
             os.makedirs(out_path)
 
