@@ -18,8 +18,8 @@ from model.model import Generator, Discriminator
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 50
+    UPSCALE_FACTOR = 2
+    NUM_EPOCHS = 25
     EPOCH_SUM = 0
     BATCH_SIZE = 2
 

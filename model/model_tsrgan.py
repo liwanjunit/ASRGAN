@@ -92,8 +92,8 @@ class ResidualBlock(nn.Module):
         self.prelu = nn.PReLU()
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
 
-        # self.attention = Attention(dim=64)
-        self.attention = InterlacedSparseSelfAttention(dim=64, P_h=8, P_w=8)
+        self.attention = Attention(dim=64)
+        # self.attention = InterlacedSparseSelfAttention(dim=64, P_h=8, P_w=8)
 
         self.block_c = nn.Sequential(
             nn.Conv2d(3, 8, kernel_size=3, padding=1),
