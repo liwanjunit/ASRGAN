@@ -18,25 +18,31 @@ class Generator_TSRGAN(nn.Module):
         self.block4 = ResidualBlock(64)
         self.block5 = ResidualBlock(64)
         self.block6 = ResidualBlock(64)
-        self.block7 = nn.Sequential(
+        self.block7 = ResidualBlock(64)
+        self.block8 = ResidualBlock(64)
+        self.block9 = ResidualBlock(64)
+        self.block10 = nn.Sequential(
             nn.Conv2d(64, 64, kernel_size=3, padding=1),
+            nn.BatchNorm2d(64)
         )
-        block8 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
-        block8.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
-        self.block8 = nn.Sequential(*block8)
+        block11 = [UpsampleBLock(64, 2) for _ in range(upsample_block_num)]
+        block11.append(nn.Conv2d(64, 3, kernel_size=9, padding=4))
+        self.block11 = nn.Sequential(*block11)
 
     def forward(self, x):
 
         block1 = self.block1(x)
-        # print('b1:', block1.shape)
         block2 = self.block2(block1)
         block3 = self.block3(block2)
         block4 = self.block4(block3)
         block5 = self.block5(block4)
         block6 = self.block6(block5)
         block7 = self.block7(block6)
-        block8 = self.block8(block1 + block7)
-        return (torch.tanh(block8) + 1) / 2
+        block8 = self.block8(block7)
+        block9 = self.block9(block8)
+        block10 = self.block10(block9)
+        block11 = self.block11(block1 + block10)
+        return (torch.tanh(block11) + 1) / 2
 
 
 class Discriminator_TSRGAN(nn.Module):
@@ -95,17 +101,12 @@ class ResidualBlock(nn.Module):
         # self.attention = Attention(dim=64)
         self.attention = InterlacedSparseSelfAttention(dim=64, P_h=8, P_w=8)
 
-        self.block_c = nn.Sequential(
-            nn.Conv2d(3, 8, kernel_size=3, padding=1),
-            nn.PReLU()
-        )
-
     def forward(self, x):
 
         residual = self.conv1(x)
         residual = self.prelu(residual)
-        residual = self.attention(residual, )
-        # residual = self.conv2(residual)
+        residual = self.attention(residual)
+        residual = self.conv2(residual)
 
         return x + residual
 
