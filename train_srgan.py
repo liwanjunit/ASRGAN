@@ -13,21 +13,21 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss.loss import GeneratorLoss
-from model.model import Generator, Discriminator
+from model.model_srgan import Generator, Discriminator
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 35
-    EPOCH_SUM = 25
+    NUM_EPOCHS = 20
+    EPOCH_SUM = 60
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
-    MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
+    MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_60.pth'
+    MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_60.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')

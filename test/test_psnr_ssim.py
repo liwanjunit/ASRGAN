@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import pytorch_ssim
 from data_utils import TestDatasetFromFolder, display_transform, ValDatasetFromFolder
 from model.model_tsrgan import Generator_TSRGAN
-from model.model import Generator
+from model.model_srgan import Generator
 from model.model_srcnn import SRCNN
 
 if __name__ == '__main__':

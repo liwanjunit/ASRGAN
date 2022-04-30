@@ -10,7 +10,7 @@ from data_utils import display_transform
 import matplotlib.pyplot as plt
 from model.model_tsrgan import Generator_TSRGAN
 from model.model_srcnn import SRCNN
-from model.model import Generator
+from model.model_srgan import Generator
 
 if __name__ == '__main__':
 

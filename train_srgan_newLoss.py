@@ -13,7 +13,7 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from loss.loss import GeneratorLoss
-from model.model import Generator, Discriminator
+from model.model_srgan import Generator, Discriminator
 
 if __name__ == '__main__':
 
