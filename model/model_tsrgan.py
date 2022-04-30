@@ -40,7 +40,7 @@ class Generator_TSRGAN(nn.Module):
         block7 = self.block7(block6)
         block8 = self.block8(block7)
         block9 = self.block9(block8)
-        block10 = self.block10(block9)
+        block10 = self.block10(block6)
         block11 = self.block11(block1 + block10)
         return (torch.tanh(block11) + 1) / 2
 
@@ -106,7 +106,7 @@ class ResidualBlock(nn.Module):
         residual = self.conv1(x)
         residual = self.prelu(residual)
         residual = self.attention(residual)
-        residual = self.conv2(residual)
+        # residual = self.conv2(residual)
 
         return x + residual
 
