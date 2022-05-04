@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
 
     bicubic_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/bicubic_test_{UPSCALE_FACTOR}.csv'
     srcnn_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/srcnn_test_{UPSCALE_FACTOR}.csv'
@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # srresnet_data = pd.read_csv(srresnet_path)
     srgan_data = pd.read_csv(srgan_path)
     tsrgan_data = pd.read_csv(tsrgan_path)
-    tsrgan_mse_data = pd.read_csv(tsrgan_mse_path)
+    # tsrgan_mse_data = pd.read_csv(tsrgan_mse_path)
     # tsrgan_v2_data = pd.read_csv(tsrgan_v2_path)
 
     bicubic_psnr_sum = []
@@ -43,22 +43,22 @@ if __name__ == '__main__':
     tsrgan_v2_psnr_sum = []
     tsrgan_v2_ssim_sum = []
 
-    for i in range(30):
+    for i in range(150):
 
-        bicubic_psnr_sum.append(bicubic_data['PSNR'][(i+1)*2])
-        bicubic_ssim_sum.append(bicubic_data['SSIM'][(i+1)*2])
+        bicubic_psnr_sum.append(bicubic_data['PSNR'][(i)])
+        bicubic_ssim_sum.append(bicubic_data['SSIM'][(i)])
 
-        srcnn_psnr_sum.append(srcnn_data['PSNR'][(i+1)*2])
-        srcnn_ssim_sum.append(srcnn_data['SSIM'][(i+1)*2])
+        srcnn_psnr_sum.append(srcnn_data['PSNR'][(i)])
+        srcnn_ssim_sum.append(srcnn_data['SSIM'][(i)])
 
         # srresnet_psnr_sum.append(srresnet_data['PSNR'][(i)])
         # srresnet_ssim_sum.append(srresnet_data['SSIM'][(i)])
 
-        srgan_psnr_sum.append(srgan_data['PSNR'][(i+1)*2])
-        srgan_ssim_sum.append(srgan_data['SSIM'][(i+1)*2])
+        srgan_psnr_sum.append(srgan_data['PSNR'][(i)])
+        srgan_ssim_sum.append(srgan_data['SSIM'][(i)])
 
-        tsrgan_psnr_sum.append(tsrgan_data['PSNR'][(i+1)*2])
-        tsrgan_ssim_sum.append(tsrgan_data['SSIM'][(i+1)*2])
+        tsrgan_psnr_sum.append(tsrgan_data['PSNR'][(i)])
+        tsrgan_ssim_sum.append(tsrgan_data['SSIM'][(i)])
 
         # tsrgan_mse_psnr_sum.append(tsrgan_mse_data['PSNR'][(i)*40])
         # tsrgan_mse_ssim_sum.append(tsrgan_mse_data['SSIM'][(i)*40])
@@ -66,16 +66,16 @@ if __name__ == '__main__':
         # tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][(i)])
         # tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][(i)])
 
-    x = range(1, 30 + 1)
+    x = range(1, 150 + 1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)
     plt.title('PSNR')
-    plt.plot(x, bicubic_psnr_sum, color='k', linestyle='--', marker='o', label='BICUBIC')
-    plt.plot(x, srcnn_psnr_sum, color='g', linestyle=':', marker='s', label='SRCNN')
+    plt.plot(x, bicubic_psnr_sum, color='k', linestyle='--', marker='', label='BICUBIC')
+    plt.plot(x, srcnn_psnr_sum, color='g', linestyle=':', marker='', label='SRCNN')
     # plt.plot(x, srresnet_psnr_sum, color='m', linestyle='--', label='SRResNet')
-    plt.plot(x, srgan_psnr_sum, color='r', linestyle='-.', marker='*', label='SRGAN')
-    plt.plot(x, tsrgan_psnr_sum, color='b', linestyle='-', marker='D', label='TSRGAN')
+    plt.plot(x, srgan_psnr_sum, color='r', linestyle='-.', marker='', label='SRGAN')
+    plt.plot(x, tsrgan_psnr_sum, color='b', linestyle='-', marker='', label='TSRGAN')
     # plt.plot(x, tsrgan_mse_psnr_sum, color='y', linestyle='-', label='TSRGAN_MSE')
     # plt.plot(x, tsrgan_v2_psnr_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.xlabel('EPOCH')
@@ -85,11 +85,11 @@ if __name__ == '__main__':
     plt.figure(2)
     # plt.subplot(1, 2, 2)
     plt.title('SSIM')
-    plt.plot(x, bicubic_ssim_sum, color='k', linestyle='--', marker='o', label='BICUBIC')
-    plt.plot(x, srcnn_ssim_sum, color='g', linestyle=':',  marker='s', label='SRCNN')
+    plt.plot(x, bicubic_ssim_sum, color='k', linestyle='--', marker='', label='BICUBIC')
+    plt.plot(x, srcnn_ssim_sum, color='g', linestyle=':',  marker='', label='SRCNN')
     # plt.plot(x, srresnet_ssim_sum, color='m', linestyle='--', label='SRResNet')
-    plt.plot(x, srgan_ssim_sum, color='r', linestyle='-.',  marker='*', label='SRGAN')
-    plt.plot(x, tsrgan_ssim_sum, color='b', linestyle='-',  marker='D', label='TSRGAN')
+    plt.plot(x, srgan_ssim_sum, color='r', linestyle='-.',  marker='', label='SRGAN')
+    plt.plot(x, tsrgan_ssim_sum, color='b', linestyle='-',  marker='', label='TSRGAN')
     # plt.plot(x, tsrgan_mse_ssim_sum, color='y', linestyle='-', label='TSRGAN_MSE')
     # plt.plot(x, tsrgan_v2_ssim_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.xlabel('EPOCH')
