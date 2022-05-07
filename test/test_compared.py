@@ -43,7 +43,7 @@ if __name__ == '__main__':
     tsrgan_v2_psnr_sum = []
     tsrgan_v2_ssim_sum = []
 
-    for i in range(150):
+    for i in range(200):
 
         bicubic_psnr_sum.append(bicubic_data['PSNR'][(i)])
         bicubic_ssim_sum.append(bicubic_data['SSIM'][(i)])
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         # tsrgan_v2_psnr_sum.append(tsrgan_v2_data['PSNR'][(i)])
         # tsrgan_v2_ssim_sum.append(tsrgan_v2_data['SSIM'][(i)])
 
-    x = range(1, 150 + 1)
+    x = range(1, 200 + 1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)
