@@ -13,21 +13,21 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder
 from loss.loss_new import GeneratorLoss_NEW
-from model.model_asrgan import Generator_TSRGAN, Discriminator_TSRGAN
+from model.model_asrgan import Generator_ASRGAN, Discriminator_ASRGAN
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 13
-    EPOCH_SUM = 17
+    NUM_EPOCHS = 20
+    EPOCH_SUM = 0
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_17.pth'
-    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_17.pth'
+    # MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_17.pth'
+    # MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_17.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -46,9 +46,9 @@ if __name__ == '__main__':
     train_loader = DataLoader(dataset=train_set, num_workers=4, batch_size=BATCH_SIZE, shuffle=True)
     val_loader = DataLoader(dataset=val_set, num_workers=4, batch_size=1, shuffle=False)
 
-    netG = Generator_TSRGAN(UPSCALE_FACTOR)
+    netG = Generator_ASRGAN(UPSCALE_FACTOR)
     print('# generator parameters:', sum(param.numel() for param in netG.parameters()))
-    netD = Discriminator_TSRGAN()
+    netD = Discriminator_ASRGAN()
     print('# discriminator parameters:', sum(param.numel() for param in netD.parameters()))
 
     generator_criterion = GeneratorLoss_NEW()
@@ -57,11 +57,11 @@ if __name__ == '__main__':
         netG.cuda()
         netD.cuda()
         generator_criterion.cuda()
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    else:
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    # else:
+    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)

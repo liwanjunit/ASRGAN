@@ -1,14 +1,14 @@
 import math
 import torch
 from torch import nn
-from attention import Attention, InterlacedSparseSelfAttention
+from attention import  InterlacedSparseSelfAttention
 
 
-class Generator_TSRGAN(nn.Module):
+class Generator_ASRGAN(nn.Module):
     def __init__(self, scale_factor):
         upsample_block_num = int(math.log(scale_factor, 2))
 
-        super(Generator_TSRGAN, self).__init__()
+        super(Generator_ASRGAN, self).__init__()
         self.block1 = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=9, padding=4),
             nn.PReLU()
@@ -44,9 +44,9 @@ class Generator_TSRGAN(nn.Module):
         return (torch.tanh(block11) + 1) / 2
 
 
-class Discriminator_TSRGAN(nn.Module):
+class Discriminator_ASRGAN(nn.Module):
     def __init__(self):
-        super(Discriminator_TSRGAN, self).__init__()
+        super(Discriminator_ASRGAN, self).__init__()
         self.net = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size=3, padding=1),
             nn.LeakyReLU(0.2),
@@ -96,7 +96,6 @@ class ResidualBlock(nn.Module):
         self.conv1 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(channels, channels, kernel_size=3, padding=1)
         self.prelu = nn.PReLU()
-        # self.attention = Attention(dim=64)
         self.attention = InterlacedSparseSelfAttention(dim=64, P_h=8, P_w=8)
 
     def forward(self, x):
@@ -104,9 +103,8 @@ class ResidualBlock(nn.Module):
         x1 = self.prelu(self.conv1(x))
         # print(f'x.shape: {x.shape}')
         # print(f'x1.shape: {x1.shape}')
-        x2 = self.prelu(self.conv1(x + x1))
+        x2 = self.prelu(self.conv2(x + x1))
         x3 = self.attention(x + x1 + x2)
-        # residual = self.conv2(residual)
 
         return x + x3 * 0.5
 
