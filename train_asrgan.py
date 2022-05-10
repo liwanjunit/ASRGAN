@@ -20,14 +20,14 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 20
-    EPOCH_SUM = 0
+    EPOCH_SUM = 20
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_17.pth'
-    # MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_17.pth'
+    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_20.pth'
+    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_20.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -57,11 +57,11 @@ if __name__ == '__main__':
         netG.cuda()
         netD.cuda()
         generator_criterion.cuda()
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    # else:
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
