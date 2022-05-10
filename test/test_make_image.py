@@ -1,0 +1,29 @@
+
+
+import cv2
+from PIL import Image, ImageDraw
+import matplotlib.pyplot as plt
+
+
+xmin = 140
+xmax = 220
+ymin = 40
+ymax = 120
+box = (xmin, ymin, xmax, ymax)
+
+img_path = f'../data/test_x2/target/data_62.png'
+img = Image.open(img_path)
+
+img_crop = img.crop(box)
+img_crop.save('2.png')
+
+draw = ImageDraw.Draw(img)
+draw.rectangle([xmin, ymin, xmax, ymax], outline='yellow', width=1)
+img.save('1.png')
+
+f, ax = plt.subplots(1, 2)
+plt.imshow(img)
+ax[0].imshow(img)
+ax[1].imshow(img_crop)
+plt.show()
+
