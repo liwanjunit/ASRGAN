@@ -3,3 +3,4 @@ test_image
 training_results
 benchmark_results
 *.png
+*.jpg
