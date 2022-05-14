@@ -17,7 +17,7 @@ if __name__ == '__main__':
     CROP_SIZE = 256
     UPSCALE_FACTOR = 4
 
-    image_name = 'data_10562.png'
+    image_name = '20.jpg'
     print('image_name: ' + image_name)
     print('----------------------')
 
