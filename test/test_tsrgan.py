@@ -15,7 +15,7 @@ if __name__ == '__main__':
     # tsrgan_v2_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/tsrgan_v2_test_{UPSCALE_FACTOR}.csv'
     tsrgan_new_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_new_x{UPSCALE_FACTOR}/tsrgan_new_test_{UPSCALE_FACTOR}.csv'
     tsrgan_pro_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan++_x{UPSCALE_FACTOR}/tsrgan++_test_{UPSCALE_FACTOR}.csv'
-    # asrgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/asrgan++_test_{UPSCALE_FACTOR}.csv'
+    asrgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/asrgan_test_{UPSCALE_FACTOR}.csv'
 
     # bicubic_data = pd.read_csv(bicubic_path)
     # srcnn_data = pd.read_csv(srcnn_path)
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # tsrgan_v2_data = pd.read_csv(tsrgan_v2_path)
     tsrgan_new_data = pd.read_csv(tsrgan_new_path)
     tsrgan_pro_data = pd.read_csv(tsrgan_pro_path)
-    # asrgan_data = pd.read_csv(asrgan_path)
+    asrgan_data = pd.read_csv(asrgan_path)
 
     # bicubic_psnr_sum = []
     # bicubic_ssim_sum = []
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     asrgan_ssim_sum = []
 
 
-    for i in range(90):
+    for i in range(50):
 
         # bicubic_psnr_sum.append(bicubic_data['PSNR'][(i)])
         # bicubic_ssim_sum.append(bicubic_data['SSIM'][(i)])
@@ -88,10 +88,10 @@ if __name__ == '__main__':
         tsrgan_pro_psnr_sum.append(tsrgan_pro_data['PSNR'][i+10])
         tsrgan_pro_ssim_sum.append(tsrgan_pro_data['SSIM'][i+10])
 
-        # asrgan_psnr_sum.append(asrgan_data['PSNR'][i])
-        # asrgan_ssim_sum.append(asrgan_data['SSIM'][i])
+        asrgan_psnr_sum.append(asrgan_data['PSNR'][i])
+        asrgan_ssim_sum.append(asrgan_data['SSIM'][i])
 
-    x = range(1, 90 + 1)
+    x = range(1, 50 + 1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     # plt.plot(x, tsrgan_v2_psnr_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.plot(x, tsrgan_new_psnr_sum, color='y', linestyle='-', label='TSRGAN_NEW')
     plt.plot(x, tsrgan_pro_psnr_sum, color='g', linestyle='-', label='TSRGAN++')
-    # plt.plot(x, asrgan_psnr_sum, color='b', linestyle='-', marker='', label='ASRGAN')
+    plt.plot(x, asrgan_psnr_sum, color='m', linestyle='-', marker='', label='ASRGAN')
     plt.xlabel('EPOCH')
     plt.ylabel('PSNR(dB)')
     plt.legend(loc='center right')
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     # plt.plot(x, tsrgan_v2_ssim_sum, color='y', linestyle='-', label='TSRGAN_v2')
     plt.plot(x, tsrgan_new_ssim_sum, color='y', linestyle='-', label='TSRGAN_NEW')
     plt.plot(x, tsrgan_pro_ssim_sum, color='g', linestyle='-', label='TSRGAN++')
-    # plt.plot(x, asrgan_ssim_sum, color='b', linestyle='',  marker='', label='ASRGAN')
+    plt.plot(x, asrgan_ssim_sum, color='m', linestyle='-',  marker='', label='ASRGAN')
 
     plt.xlabel('EPOCH')
     plt.ylabel('SSIM')
