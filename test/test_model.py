@@ -11,13 +11,14 @@ import matplotlib.pyplot as plt
 from model.model_tsrgan import Generator_TSRGAN
 from model.model_srcnn import SRCNN
 from model.model_srgan import Generator
+from model.model_asrgan import Generator_ASRGAN
 
 if __name__ == '__main__':
 
     CROP_SIZE = 256
     UPSCALE_FACTOR = 4
 
-    image_name = '20.jpg'
+    image_name = 'data_13985.png'
     print('image_name: ' + image_name)
     print('----------------------')
 
@@ -28,7 +29,7 @@ if __name__ == '__main__':
     SRGAN_MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/G/srgan_netG_epoch_{UPSCALE_FACTOR}_193.pth'
     # TSRGAN_MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_179.pth'
     TSRGAN_NEW_MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_new_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_167.pth'
-    # TSRGAN_PRO_MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan++_x{UPSCALE_FACTOR}/G/tsrgan_netG_epoch_{UPSCALE_FACTOR}_29.pth'
+    ASRGAN_MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/G/asrgan_netG_epoch_{UPSCALE_FACTOR}_106.pth'
 
     hr_path = 'C:/code/ASRGAN/ASRGAN-master/test/compared/data/'
 
@@ -37,7 +38,7 @@ if __name__ == '__main__':
     srgan_model = Generator(UPSCALE_FACTOR).eval()
     # tsrgan_model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
     tsrgan_new_model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-    # asrgan_model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
+    asrgan_model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
 
     if torch.cuda.is_available():
         srcnn_model = srcnn_model.cuda()
@@ -45,14 +46,14 @@ if __name__ == '__main__':
         srgan_model = srgan_model.cuda()
         # tsrgan_model = tsrgan_model.cuda()
         tsrgan_new_model = tsrgan_new_model.cuda()
-        # tsrgan_v2_model = tsrgan_v2_model.cuda()
+        asrgan_model = asrgan_model.cuda()
 
     srcnn_model.load_state_dict(torch.load(SRCNN_MODEL_NAME), False)
     srresnet_model.load_state_dict(torch.load(SRResNet_MODEL_NAME), False)
     srgan_model.load_state_dict(torch.load(SRGAN_MODEL_NAME), False)
     # tsrgan_model.load_state_dict(torch.load(TSRGAN_MODEL_NAME), False)
     tsrgan_new_model.load_state_dict(torch.load(TSRGAN_NEW_MODEL_NAME), False)
-    # tsrgan_v2_model.load_state_dict(torch.load(TSRGAN_V2_MODEL_NAME), False)
+    asrgan_model.load_state_dict(torch.load(ASRGAN_MODEL_NAME), False)
 
     hr_image = Image.open(hr_path + image_name)
 
@@ -77,6 +78,7 @@ if __name__ == '__main__':
         srgan_image = srgan_model(lr_image)
         # tsrgan_image = tsrgan_model(lr_image)
         tsrgan_new_image = tsrgan_new_model(lr_image)
+        asrgan_image = asrgan_model(lr_image)
 
         bicubic_psnr = 10 * log10(1 / ((hr_image - bicubic_image) ** 2).data.mean())
         srcnn_psnr = 10 * log10(1 / ((hr_image - srcnn_image) ** 2).data.mean())
@@ -84,12 +86,14 @@ if __name__ == '__main__':
         srgan_psnr = 10 * log10(1 / ((hr_image - srgan_image) ** 2).data.mean())
         # tsrgan_psnr = 10 * log10(1 / ((hr_image - tsrgan_image) ** 2).data.mean())
         tsrgan_new_psnr = 10 * log10(1 / ((hr_image - tsrgan_new_image) ** 2).data.mean())
+        asrgan_psnr = 10 * log10(1 / ((hr_image - asrgan_image) ** 2).data.mean())
         print('bicubic_PSNR:  {:.4f}'.format(bicubic_psnr))
         print('srcnn_PSNR:    {:.4f}'.format(srcnn_psnr))
         print('srresnet_PSNR: {:.4f}'.format(srresnet_psnr))
         print('srgan_PSNR:    {:.4f}'.format(srgan_psnr))
         # print('tsrgan_PSNR:   {:.4f}'.format(tsrgan_psnr))
         print('tsrgan_new_PSNR:   {:.4f}'.format(tsrgan_new_psnr))
+        print('asrgan_PSNR:   {:.4f}'.format(asrgan_psnr))
 
         print('----------------------')
 
@@ -99,6 +103,7 @@ if __name__ == '__main__':
         srgan_ssim = pytorch_ssim.ssim(srgan_image, hr_image).item()
         # tsrgan_ssim = pytorch_ssim.ssim(tsrgan_image, hr_image).item()
         tsrgan_new_ssim = pytorch_ssim.ssim(tsrgan_new_image, hr_image).item()
+        asrgan_ssim = pytorch_ssim.ssim(asrgan_image, hr_image).item()
 
         print('bicubic_SSIM:  {:.4f}'.format(bicubic_ssim))
         print('srcnn_SSIM:    {:.4f}'.format(srcnn_ssim))
@@ -106,19 +111,21 @@ if __name__ == '__main__':
         print('srgan_SSIM:    {:.4f}'.format(srgan_ssim))
         # print('tsrgan_SSIM:   {:.4f}'.format(tsrgan_ssim))
         print('tsrgan_new_SSIM:   {:.4f}'.format(tsrgan_new_ssim))
+        print('asrgan_SSIM:   {:.4f}'.format(asrgan_ssim))
 
         print('----------------------')
 
     test_images = torch.stack(
-        [display_transform()(hr_image.data.cpu().squeeze(0)),
-         display_transform()(bicubic_image.data.cpu().squeeze(0)),
+        [display_transform()(bicubic_image.data.cpu().squeeze(0)),
          display_transform()(srcnn_image.data.cpu().squeeze(0)),
          display_transform()(srresnet_image.data.cpu().squeeze(0)),
          display_transform()(srgan_image.data.cpu().squeeze(0)),
          # display_transform()(tsrgan_image.data.cpu().squeeze(0))
-         display_transform()(tsrgan_new_image.data.cpu().squeeze(0))
+         display_transform()(tsrgan_new_image.data.cpu().squeeze(0)),
+         display_transform()(asrgan_image.data.cpu().squeeze(0)),
+         display_transform()(hr_image.data.cpu().squeeze(0)),
          ])
-    image = utils.make_grid(test_images, nrow=6, padding=5)
+    image = utils.make_grid(test_images, nrow=4, padding=5)
     utils.save_image(image, PATH + image_name.split('.')[0] + '_compared' + '.png')
 
     bicubic_image = ToPILImage()(bicubic_image[0].data.cpu())
@@ -127,13 +134,15 @@ if __name__ == '__main__':
     srgan_image = ToPILImage()(srgan_image[0].data.cpu())
     # tsrgan_image = ToPILImage()(tsrgan_image[0].data.cpu())
     tsrgan_new_image = ToPILImage()(tsrgan_new_image[0].data.cpu())
+    asrgan_image = ToPILImage()(asrgan_image[0].data.cpu())
 
     bicubic_image.save(PATH + 'results/' + image_name.split('.')[0] + '_bicubic' + f'_psnr_{bicubic_psnr}_ssim_{bicubic_ssim}' + '.png')
     srcnn_image.save(PATH + 'results/' + image_name.split('.')[0] + '_srcnn' + f'_psnr_{srcnn_psnr}_ssim_{srcnn_ssim}' + '.png')
     srresnet_image.save(PATH + 'results/' + image_name.split('.')[0] + '_srcnn' + f'_psnr_{srresnet_psnr}_ssim_{srresnet_ssim}' + '.png')
     srgan_image.save(PATH + 'results/' + image_name.split('.')[0] + '_srgan' + f'_psnr_{srgan_psnr}_ssim_{srgan_ssim}' + '.png')
     # tsrgan_image.save(PATH + 'results/' + image_name.split('.')[0] + '_tsrgan' + f'_psnr_{tsrgan_psnr}_ssim_{tsrgan_ssim}' + '.png')
-    tsrgan_new_image.save(PATH + 'results/' + image_name.split('.')[0] + '_tsrgan' + f'_psnr_{tsrgan_new_psnr}_ssim_{tsrgan_new_ssim}' + '.png')
+    tsrgan_new_image.save(PATH + 'results/' + image_name.split('.')[0] + '_tsrgan_new' + f'_psnr_{tsrgan_new_psnr}_ssim_{tsrgan_new_ssim}' + '.png')
+    asrgan_image.save(PATH + 'results/' + image_name.split('.')[0] + '_asrgan' + f'_psnr_{asrgan_psnr}_ssim_{asrgan_ssim}' + '.png')
 
     result = Image.open(PATH + image_name.split('.')[0] + '_compared' + '.png')
 

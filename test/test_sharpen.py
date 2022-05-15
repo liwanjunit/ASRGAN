@@ -13,7 +13,7 @@ def custom_blur_demo(image):
     cv.imshow("sharpen", dst)
 
 
-PATH = 'C:/code/ASRGAN/ASRGAN-master/test/compared/data_10562_compared.png'
+PATH = 'C:/code/ASRGAN/ASRGAN-master/test/compared/data_13985_compared.png'
 
 src = cv.imread(PATH)
 cv.namedWindow("input image", cv.WINDOW_AUTOSIZE)
