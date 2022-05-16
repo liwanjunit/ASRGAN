@@ -4,23 +4,31 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 4
 
     bicubic_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/bicubic_test_{UPSCALE_FACTOR}.csv'
     srcnn_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/srcnn_test_{UPSCALE_FACTOR}.csv'
     srresnet_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/srresnet_test_{UPSCALE_FACTOR}.csv'
     srgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/srgan_test_{UPSCALE_FACTOR}.csv'
     tsrgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_x{UPSCALE_FACTOR}/tsrgan_test_{UPSCALE_FACTOR}.csv'
+    tsrgan_new_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_new_x{UPSCALE_FACTOR}/tsrgan_new_test_{UPSCALE_FACTOR}.csv'
+    tsrgan_pro_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan++_x{UPSCALE_FACTOR}/tsrgan++_test_{UPSCALE_FACTOR}.csv'
     tsrgan_mse_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_mse_x{UPSCALE_FACTOR}/tsrgan_mse_test_{UPSCALE_FACTOR}.csv'
     tsrgan_v2_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/tsrgan_v2_x{UPSCALE_FACTOR}/tsrgan_v2_test_{UPSCALE_FACTOR}.csv'
+    asrgan_path = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/asrgan_test_{UPSCALE_FACTOR}.csv'
+
 
     bicubic_data = pd.read_csv(bicubic_path)
     srcnn_data = pd.read_csv(srcnn_path)
     # srresnet_data = pd.read_csv(srresnet_path)
     srgan_data = pd.read_csv(srgan_path)
     tsrgan_data = pd.read_csv(tsrgan_path)
+    tsrgan_new_data = pd.read_csv(tsrgan_new_path)
+    tsrgan_pro_data = pd.read_csv(tsrgan_pro_path)
     # tsrgan_mse_data = pd.read_csv(tsrgan_mse_path)
     # tsrgan_v2_data = pd.read_csv(tsrgan_v2_path)
+    asrgan_data = pd.read_csv(asrgan_path)
+
 
     bicubic_psnr_sum = []
     bicubic_ssim_sum = []

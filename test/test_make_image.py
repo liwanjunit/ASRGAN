@@ -1,9 +1,6 @@
 
-
-
 from PIL import Image, ImageDraw
 import matplotlib.pyplot as plt
-from pandas import np
 
 xmin = 0
 xmax = 256
@@ -21,13 +18,13 @@ img = img.convert("RGB")
 img_crop = img.crop(box)
 img_crop.save(f'compared/data/crop_{image_name}.png')
 
-# draw = ImageDraw.Draw(img)
-# draw.rectangle([xmin, ymin, xmax, ymax], outline='yellow', width=1)
-# img.save(f'results/draw_{image_name}.png')
-#
-# f, ax = plt.subplots(1, 2)
-# plt.imshow(img)
-# ax[0].imshow(img)
-# ax[1].imshow(img_crop)
-# plt.show()
+draw = ImageDraw.Draw(img)
+draw.rectangle([xmin, ymin, xmax, ymax], outline='yellow', width=1)
+img.save(f'results/draw_{image_name}.png')
+
+f, ax = plt.subplots(1, 2)
+plt.imshow(img)
+ax[0].imshow(img)
+ax[1].imshow(img_crop)
+plt.show()
 
