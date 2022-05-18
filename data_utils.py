@@ -74,7 +74,7 @@ class ValDatasetFromFolder(Dataset):
 
     def __getitem__(self, index):
         hr_image = Image.open(self.image_filenames[index])
-        w, h = hr_image.size
+        w, h = 256
         crop_size = calculate_valid_crop_size(min(w, h), self.upscale_factor)
         # crop_size = calculate_valid_crop_size(self.crop_size, self.upscale_factor)
         # crop_size = 88
