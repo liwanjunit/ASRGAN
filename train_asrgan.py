@@ -59,9 +59,9 @@ if __name__ == '__main__':
         # generator_criterion.cuda()
         # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    else:
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+    # else:
+    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 343:
+                if image_index == 200:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'asrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 

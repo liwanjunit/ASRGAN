@@ -145,7 +145,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 343:
+                if image_index == 200:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
