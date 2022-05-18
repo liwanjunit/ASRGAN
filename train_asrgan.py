@@ -18,16 +18,16 @@ from model.model_asrgan import Generator_ASRGAN, Discriminator_ASRGAN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 20
-    EPOCH_SUM = 180
+    UPSCALE_FACTOR = 2
+    NUM_EPOCHS = 10
+    EPOCH_SUM = 0
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_180.pth'
-    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_180.pth'
+    # MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_180.pth'
+    # MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_180.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -56,9 +56,9 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
-        generator_criterion.cuda()
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+        # generator_criterion.cuda()
+        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
     else:
         netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
         netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
