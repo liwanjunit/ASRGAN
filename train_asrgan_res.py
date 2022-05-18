@@ -37,8 +37,9 @@ if __name__ == '__main__':
     train_set = TrainDatasetFromFolder('/kaggle/input/data-14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     val_set = ValDatasetFromFolder('/kaggle/input/data-14624/test', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data-14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data-14624/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_14624/test', upscale_factor=UPSCALE_FACTOR)
+
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)

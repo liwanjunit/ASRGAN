@@ -34,11 +34,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14624/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-14624/test', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data-14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data-14624/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_14624/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_14624/test', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('../input/input0/data_17500/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('../input/input0/data_17500/val', upscale_factor=UPSCALE_FACTOR)
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         netG.cuda()
         netD.cuda()
-        # generator_criterion.cuda()
+        generator_criterion.cuda()
         # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
     # else:
