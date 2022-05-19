@@ -21,25 +21,25 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 100
-    EPOCH_SUM = 100
+    NUM_EPOCHS = 50
+    EPOCH_SUM = 0
 
     INIT_LR = 0.0001
     BATCH_SIZE = 2
 
     # MODEL_NAME = f'/kaggle/input/sr-model/srcnn_epoch_{UPSCALE_FACTOR}_100.pth'
-    MODEL_NAME = f'srcnn_epoch_{UPSCALE_FACTOR}_100.pth'
+    # MODEL_NAME = f'srcnn_epoch_{UPSCALE_FACTOR}_100.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
 
-    train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
 
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
@@ -56,10 +56,10 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
+        # model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
         # model.load_state_dict(torch.load(MODEL_NAME), False)
-    else:
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
+    # else:
+        # model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
         # model.load_state_dict(torch.load(MODEL_NAME, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(model.parameters(), lr=INIT_LR)
@@ -114,7 +114,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = model(lr)
 
-                # if image_index == 343:
+                # if image_index == 300:
                 #     sr_image = ToPILImage()(sr[0].data.cpu())
                 #     sr_image.save('test_image/results/' + 'srcnn_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
                 #
