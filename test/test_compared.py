@@ -51,7 +51,7 @@ if __name__ == '__main__':
     tsrgan_v2_psnr_sum = []
     tsrgan_v2_ssim_sum = []
 
-    for i in range(200):
+    for i in range(20):
 
         bicubic_psnr_sum.append(bicubic_data['PSNR'][(i)])
         bicubic_ssim_sum.append(bicubic_data['SSIM'][(i)])
