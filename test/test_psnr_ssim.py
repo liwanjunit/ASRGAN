@@ -52,9 +52,9 @@ if __name__ == '__main__':
         MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
         # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
 
-        model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
+        # model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
         # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-        # model = Generator(UPSCALE_FACTOR).eval()
+        model = Generator(UPSCALE_FACTOR).eval()
         # model = SRCNN().eval()
         # model = EDSR(UPSCALE_FACTOR).eval()
         if torch.cuda.is_available():
