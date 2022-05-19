@@ -19,15 +19,15 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 50
-    EPOCH_SUM = 0
+    NUM_EPOCHS = 27
+    EPOCH_SUM = 3
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_180.pth'
-    # MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_180.pth'
+    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_3.pth'
+    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_3.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -57,11 +57,11 @@ if __name__ == '__main__':
         netG.cuda()
         netD.cuda()
         generator_criterion.cuda()
-        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
-        # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    # else:
-    #     netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
-    #     netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
+    else:
+        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+        netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
     optimizerD = optim.Adam(netD.parameters(), lr=D_INIT_LR)
@@ -146,7 +146,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 200:
+                if image_index == 300:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'asrgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 
