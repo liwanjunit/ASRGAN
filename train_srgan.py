@@ -18,7 +18,7 @@ from model.model_srgan import Generator, Discriminator
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 4
     NUM_EPOCHS = 25
     EPOCH_SUM = 0
     BATCH_SIZE = 2
@@ -34,11 +34,11 @@ if __name__ == '__main__':
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
 
-    train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
