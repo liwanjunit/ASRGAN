@@ -20,7 +20,7 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 4
 
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
 
@@ -44,14 +44,14 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(1):
+    for i in range(50):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
         MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
+        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
 
         # model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
         # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()

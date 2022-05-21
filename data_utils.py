@@ -56,7 +56,7 @@ class TrainDatasetFromFolder(Dataset):
         self.bicubic_transform = train_bicubic_transform(crop_size)
 
     def __getitem__(self, index):
-        hr_image = self.hr_transform(Image.open(self.image_filenames[index]))
+        hr_image = self.hr_transform(Image.open(self.image_filenames[index]).convert('RGB'))
         lr_image = self.lr_transform(hr_image)
         bicubic_image = self.bicubic_transform(lr_image)
         return lr_image, bicubic_image, hr_image
@@ -73,7 +73,7 @@ class ValDatasetFromFolder(Dataset):
         self.image_filenames = [join(dataset_dir, x) for x in listdir(dataset_dir) if is_image_file(x)]
 
     def __getitem__(self, index):
-        hr_image = Image.open(self.image_filenames[index])
+        hr_image = Image.open(self.image_filenames[index]).convert('RGB')
         w, h = hr_image.size
         crop_size = calculate_valid_crop_size(min(w, h), self.upscale_factor)
         # crop_size = calculate_valid_crop_size(self.crop_size, self.upscale_factor)
@@ -100,8 +100,8 @@ class TestDatasetFromFolder(Dataset):
 
     def __getitem__(self, index):
         image_name = self.lr_filenames[index].split('/')[-1]
-        lr_image = Image.open(self.lr_filenames[index])
-        hr_image = Image.open(self.hr_filenames[index])
+        lr_image = Image.open(self.lr_filenames[index]).convert('RGB')
+        hr_image = Image.open(self.hr_filenames[index]).convert('RGB')
 
         return image_name, ToTensor()(lr_image), ToTensor()(hr_image)
 
