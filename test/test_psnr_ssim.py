@@ -20,12 +20,13 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
 
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
 
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
+    # MODEL = 'srcnn'
     # MODEL = 'srresnet'
     MODEL = 'srgan'
     # MODEL = 'tsrgan'
@@ -40,43 +41,47 @@ if __name__ == '__main__':
     ssim_set = []
 
     test_set = TestDatasetFromFolder(TEST_DIR)
-    # val_set = ValDatasetFromFolder('C:/code/ASRGAN/data_17500/val', upscale_factor=UPSCALE_FACTOR)
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(50):
+    for i in range(100):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
-        MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
-        # MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i+1}.pth'
+        if MODEL == 'srcnn' or MODEL == 'edsr':
+            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + 1}.pth'
+        else:
+            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + 1}.pth'
 
-        # model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
-        # model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-        model = Generator(UPSCALE_FACTOR).eval()
-        # model = SRCNN().eval()
-        # model = EDSR(UPSCALE_FACTOR).eval()
+        if MODEL == 'srcnn':
+            model = SRCNN().eval()
+        if MODEL == 'edsr':
+            model = EDSR(UPSCALE_FACTOR).eval()
+        if MODEL == 'srgan':
+            model = Generator(UPSCALE_FACTOR).eval()
+        if MODEL == 'tsrgan':
+            model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
+        if MODEL == 'asrgan':
+            model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
+
         if torch.cuda.is_available():
             model = model.cuda()
         model.load_state_dict(torch.load(MODEL_NAME), False)
 
         with torch.no_grad():
 
-            for image_name, lr_image, hr_image in test_bar:
-            # for val_lr, val_hr_restore, val_hr in test_bar:
+            for image_name, lr_image, bicubic_image, hr_image in test_bar:
 
                 image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
+                bicubic_image = Variable(bicubic_image, volatile=True)
                 hr_image = Variable(hr_image, volatile=True)
-                # lr_image = Variable(val_lr, volatile=True)
-                # hr_image = Variable(val_hr, volatile=True)
-
-                # print(lr_image.shape)
 
                 if torch.cuda.is_available():
                     lr_image = lr_image.cuda()
+                    bicubic_image = bicubic_image.cuda()
                     hr_image = hr_image.cuda()
 
                 sr_image = model(lr_image)
@@ -108,11 +113,10 @@ if __name__ == '__main__':
     x = range(1, epoch_sum)
 
     plt.figure(1)
-    plt.subplot(1, 2, 1)
     plt.plot(x, psnr_set)
     plt.xlabel("PSNR")
 
-    plt.subplot(1, 2, 2)
+    plt.figure(2)
     plt.plot(x, ssim_set)
     plt.xlabel("SSIM")
 

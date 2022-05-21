@@ -18,27 +18,27 @@ from model.model_srgan import Generator, Discriminator
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
     NUM_EPOCHS = 25
-    EPOCH_SUM = 50
+    EPOCH_SUM = 0
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
-    MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_G = f'srgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_D = f'srgan_netD_epoch_{UPSCALE_FACTOR}_95.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                     hr = hr.cuda()
                 sr = netG(lr)
 
-                if image_index == 300:
+                if image_index == 350:
                     sr_image = ToPILImage()(sr[0].data.cpu())
                     sr_image.save('test_image/results/' + 'srgan_%d_%d.png' % (UPSCALE_FACTOR, epoch + EPOCH_SUM))
 

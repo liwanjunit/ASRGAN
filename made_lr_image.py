@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
     CROP_SIZE = 256
     UPSCALE_FACTOR = 8
-    TARGET_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/target/'
+    HR_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/target/'
     LR_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/data/'
     BICUBIC_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/bicubic/'
 
@@ -17,12 +17,13 @@ if __name__ == '__main__':
 
     for filename in os.listdir(rf'data/new_data/test_x{UPSCALE_FACTOR}/target'):
         # print(filename)
-        hr_image = Image.open(TARGET_PATH + filename)
+        hr_image = Image.open(HR_PATH + filename)
 
         lr_image = lr_scale(hr_image)
         bicubic_image = bicubic_scale(lr_image)
-        bicubic_image.save(BICUBIC_PATH + filename)
+
         lr_image.save(LR_PATH + filename)
+        bicubic_image.save(BICUBIC_PATH + filename)
 
     print('Finish')
 

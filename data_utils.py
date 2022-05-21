@@ -93,17 +93,19 @@ class TestDatasetFromFolder(Dataset):
     def __init__(self, dataset_dir):
         super(TestDatasetFromFolder, self).__init__()
         self.lr_path = dataset_dir + '/data/'
-        # self.lr_path = dataset_dir + '/bicubic/'
+        self.bicubic_path = dataset_dir + '/bicubic/'
         self.hr_path = dataset_dir + '/target/'
         self.lr_filenames = [join(self.lr_path, x) for x in listdir(self.lr_path) if is_image_file(x)]
+        self.bicubic_filenames = [join(self.bicubic_path, x) for x in listdir(self.bicubic_path) if is_image_file(x)]
         self.hr_filenames = [join(self.hr_path, x) for x in listdir(self.hr_path) if is_image_file(x)]
 
     def __getitem__(self, index):
         image_name = self.lr_filenames[index].split('/')[-1]
         lr_image = Image.open(self.lr_filenames[index]).convert('RGB')
+        bicubic_image = Image.open(self.bicubic_filenames[index]).convert('RGB')
         hr_image = Image.open(self.hr_filenames[index]).convert('RGB')
 
-        return image_name, ToTensor()(lr_image), ToTensor()(hr_image)
+        return image_name, ToTensor()(lr_image), ToTensor()(bicubic_image), ToTensor()(hr_image)
 
     def __len__(self):
         return len(self.lr_filenames)
