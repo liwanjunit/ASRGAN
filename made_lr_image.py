@@ -7,7 +7,7 @@ from torchvision.transforms import ToPILImage, ToTensor, Resize
 if __name__ == '__main__':
 
     CROP_SIZE = 256
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 2
     HR_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/target/'
     LR_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/data/'
     BICUBIC_PATH = f'data/new_data/test_x{UPSCALE_FACTOR}/bicubic/'
