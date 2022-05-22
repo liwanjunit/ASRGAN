@@ -20,7 +20,7 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 4
 
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
 
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(100):
+    for i in range(75):
 
         index = 1
         psnr_sum = 0
@@ -72,16 +72,14 @@ if __name__ == '__main__':
 
         with torch.no_grad():
 
-            for image_name, lr_image, bicubic_image, hr_image in test_bar:
+            for image_name, lr_image, _, hr_image in test_bar:
 
                 image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
-                bicubic_image = Variable(bicubic_image, volatile=True)
                 hr_image = Variable(hr_image, volatile=True)
 
                 if torch.cuda.is_available():
                     lr_image = lr_image.cuda()
-                    bicubic_image = bicubic_image.cuda()
                     hr_image = hr_image.cuda()
 
                 sr_image = model(lr_image)
