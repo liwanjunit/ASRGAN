@@ -26,9 +26,9 @@ if __name__ == '__main__':
 
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
-    # MODEL = 'srcnn'
+    MODEL = 'srcnn'
     # MODEL = 'srresnet'
-    MODEL = 'srgan'
+    # MODEL = 'srgan'
     # MODEL = 'tsrgan'
     # MODEL = 'tsrgan_mse'
     # MODEL = 'tsrgan_v2'
@@ -44,7 +44,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(75):
+    for i in range(100):
 
         index = 1
         psnr_sum = 0
@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
         with torch.no_grad():
 
-            for image_name, lr_image, _, hr_image in test_bar:
+            for image_name, _, lr_image, hr_image in test_bar:
 
                 image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
