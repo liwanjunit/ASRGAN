@@ -20,29 +20,33 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
 
-    TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
+    # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
+    TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
 
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
-    MODEL = 'srcnn'
+    # MODEL = 'srcnn'
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'tsrgan'
     # MODEL = 'tsrgan_mse'
     # MODEL = 'tsrgan_v2'
     # MODEL = 'asrresnet'
-    # MODEL = 'asrgan'
+    MODEL = 'asrgan'
 
     epoch_sum = 1
 
     psnr_set = []
     ssim_set = []
 
-    test_set = TestDatasetFromFolder(TEST_DIR)
+    # test_set = TestDatasetFromFolder(TEST_DIR)
+    test_set = ValDatasetFromFolder(TEST_DIR, upscale_factor=UPSCALE_FACTOR)
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
+
+    index = 1
 
     for i in range(100):
 
@@ -50,10 +54,10 @@ if __name__ == '__main__':
         psnr_sum = 0
         ssim_sum = 0
 
-        if MODEL == 'srcnn' or MODEL == 'edsr':
-            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + 1}.pth'
+        if MODEL == 'srcnn' or MODEL == 'edsr' or MODEL == 'srresnet' or MODEL == 'asrresnet':
+            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
         else:
-            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + 1}.pth'
+            MODEL_NAME = f'C:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
 
         if MODEL == 'srcnn':
             model = SRCNN().eval()
@@ -72,9 +76,10 @@ if __name__ == '__main__':
 
         with torch.no_grad():
 
-            for image_name, _, lr_image, hr_image in test_bar:
+            # for image_name, lr_image, _, hr_image in test_bar:
+            for lr_image, _, hr_image in test_bar:
 
-                image_name = image_name[0]
+                # image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
                 hr_image = Variable(hr_image, volatile=True)
 
