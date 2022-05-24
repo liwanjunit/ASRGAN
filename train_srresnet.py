@@ -20,7 +20,7 @@ from model.model_srgan import Generator
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
     NUM_EPOCHS = 100
     EPOCH_SUM = 0
 

@@ -20,16 +20,16 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
     NUM_EPOCHS = 25
-    EPOCH_SUM = 0
+    EPOCH_SUM = 25
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    # MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_100.pth'
-    # MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_100.pth'
-    MODEL_NAME_G = f'asrgan_netG_epoch_2_100.pth'
-    MODEL_NAME_D = f'asrgan_netD_epoch_2_100.pth'
+    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_25.pth'
+    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_25.pth'
+    # MODEL_NAME_G = f'asrgan_netG_epoch_2_100.pth'
+    # MODEL_NAME_D = f'asrgan_netD_epoch_2_100.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
