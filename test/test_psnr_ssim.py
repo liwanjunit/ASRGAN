@@ -20,7 +20,7 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 8
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
@@ -63,11 +63,11 @@ if __name__ == '__main__':
             model = SRCNN().eval()
         if MODEL == 'edsr':
             model = EDSR(UPSCALE_FACTOR).eval()
-        if MODEL == 'srgan':
+        if MODEL == 'srgan' or MODEL == 'srresnet':
             model = Generator(UPSCALE_FACTOR).eval()
-        if MODEL == 'tsrgan':
+        if MODEL == 'tsrgan' or MODEL == 'tsrresnet':
             model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
-        if MODEL == 'asrgan':
+        if MODEL == 'asrgan' or MODEL == 'asrresnet':
             model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
 
         if torch.cuda.is_available():

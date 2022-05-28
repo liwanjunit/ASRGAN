@@ -12,8 +12,7 @@ image_name = '7'
 
 # img_path = f'../data/test_x2/target/{image_name}.png'
 img_path = f'C:/Users/lai/Desktop/{image_name}.png'
-img = Image.open(img_path)
-img = img.convert("RGB")
+img = Image.open(img_path).convert("RGB")
 
 img_crop = img.crop(box)
 img_crop.save(f'compared/data/crop_{image_name}.png')
