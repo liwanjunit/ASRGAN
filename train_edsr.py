@@ -20,24 +20,24 @@ from model.model_esdr import EDSR
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
-    NUM_EPOCHS = 22
-    EPOCH_SUM = 78
+    UPSCALE_FACTOR = 8
+    NUM_EPOCHS = 100
+    EPOCH_SUM = 0
 
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_78.pth'
+    # MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_78.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
 
-    train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
     # val_set = ValDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/val', upscale_factor=UPSCALE_FACTOR)
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
-    else:
-        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
+    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
+    # else:
+    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(model.parameters(), lr=G_INIT_LR)
 
