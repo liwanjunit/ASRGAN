@@ -20,13 +20,13 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 4
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
 
     # MODEL = 'bicubic'
-    # MODEL = 'edsr'
+    MODEL = 'edsr'
     # MODEL = 'srcnn'
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # MODEL = 'tsrgan_mse'
     # MODEL = 'tsrgan_v2'
     # MODEL = 'asrresnet'
-    MODEL = 'asrgan'
+    # MODEL = 'asrgan'
 
     epoch_sum = 1
 
