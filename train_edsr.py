@@ -27,7 +27,7 @@ if __name__ == '__main__':
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    # MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_78.pth'
+    MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_50.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
@@ -53,9 +53,9 @@ if __name__ == '__main__':
     if torch.cuda.is_available():
         model.cuda()
         loss_function.cuda()
-    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
-    # else:
-    #     model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
+        model.load_state_dict(torch.load('epochs/' + MODEL_NAME), False)
+    else:
+        model.load_state_dict(torch.load('epochs/' + MODEL_NAME, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(model.parameters(), lr=G_INIT_LR)
 
