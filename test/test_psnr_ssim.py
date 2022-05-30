@@ -26,7 +26,7 @@ if __name__ == '__main__':
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
 
     # MODEL = 'bicubic'
-    MODEL = 'edsr'
+    # MODEL = 'edsr'
     # MODEL = 'srcnn'
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # MODEL = 'tsrgan_mse'
     # MODEL = 'tsrgan_v2'
     # MODEL = 'asrresnet'
-    # MODEL = 'asrgan'
+    MODEL = 'asrgan'
 
     epoch_sum = 1
 
@@ -46,9 +46,9 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    index = 1
+    index = 100
 
-    for i in range(100):
+    for i in range(25):
 
         index = 1
         psnr_sum = 0
