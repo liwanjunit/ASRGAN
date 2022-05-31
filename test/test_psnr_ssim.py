@@ -33,8 +33,8 @@ if __name__ == '__main__':
     # MODEL = 'tsrgan'
     # MODEL = 'tsrgan_mse'
     # MODEL = 'tsrgan_v2'
-    # MODEL = 'asrresnet'
-    MODEL = 'asrgan'
+    MODEL = 'asrresnet'
+    # MODEL = 'asrgan'
 
     epoch_sum = 1
 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(125):
+    for i in range(200):
 
         index = 1
         psnr_sum = 0

@@ -34,7 +34,7 @@ if __name__ == '__main__':
     nb = 23   # RRDB层数
     gc = 32
 
-    MODEL_NAME_G = 'RRDB_ESRGAN_x4.pth'
+    # MODEL_NAME_G = 'RRDB_ESRGAN_x4.pth'
     # MODEL_NAME_D = 'netD_epoch_4_7.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
@@ -68,10 +68,10 @@ if __name__ == '__main__':
         netD.cuda()
         G_loss.cuda()
         D_loss.cuda()
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
+        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G), False)
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D), False)
-    else:
-        netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
+    # else:
+        # netG.load_state_dict(torch.load('epochs/' + MODEL_NAME_G, map_location=lambda storage, loc: storage))
         # netD.load_state_dict(torch.load('epochs/' + MODEL_NAME_D, map_location=lambda storage, loc: storage))
 
     optimizerG = optim.Adam(netG.parameters(), lr=G_INIT_LR)
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
         netG.train()
         netD.train()
-        for data, target in train_bar:
+        for data, _, target in train_bar:
             g_update_first = True
             batch_size = data.size(0)
             running_results['batch_sizes'] += batch_size
@@ -169,17 +169,17 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f' % (
                         valing_results['psnr'], valing_results['ssim']))
 
-                val_images.extend(
-                    [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
-                     display_transform()(sr.data.cpu().squeeze(0))])
-            val_images = torch.stack(val_images)
-            val_images = torch.chunk(val_images, val_images.size(0) // 15)
-            val_save_bar = tqdm(val_images, desc='[saving training results]')
-            index = 1
-            for image in val_save_bar:
-                image = utils.make_grid(image, nrow=3, padding=5)
-                utils.save_image(image, out_path + 'esrgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
-                index += 1
+            #     val_images.extend(
+            #         [display_transform()(val_hr_restore.squeeze(0)), display_transform()(hr.data.cpu().squeeze(0)),
+            #          display_transform()(sr.data.cpu().squeeze(0))])
+            # val_images = torch.stack(val_images)
+            # val_images = torch.chunk(val_images, val_images.size(0) // 15)
+            # val_save_bar = tqdm(val_images, desc='[saving training results]')
+            # index = 1
+            # for image in val_save_bar:
+            #     image = utils.make_grid(image, nrow=3, padding=5)
+            #     utils.save_image(image, out_path + 'esrgan_epoch_%d_index_%d.png' % (epoch + EPOCH_SUM, index), padding=5)
+            #     index += 1
 
         # save model parameters
         if epoch % 1 == 0 and epoch != 0:
