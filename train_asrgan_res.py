@@ -23,12 +23,12 @@ if __name__ == '__main__':
     CROP_SIZE = 128
     UPSCALE_FACTOR = 2
     NUM_EPOCHS = 100
-    EPOCH_SUM = 100
+    EPOCH_SUM = 139
 
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME = f'asrresnet_epoch_{UPSCALE_FACTOR}_100.pth'
+    MODEL_NAME = f'asrresnet_epoch_{UPSCALE_FACTOR}_139.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')

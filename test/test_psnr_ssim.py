@@ -20,7 +20,7 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 2
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
@@ -46,16 +46,16 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(25):
+    for i in range(150):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
         if MODEL == 'srcnn' or MODEL == 'edsr' or MODEL == 'srresnet' or MODEL == 'asrresnet':
-            MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + 100}.pth'
+            MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
         else:
-            MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + 100}.pth'
+            MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
 
         if MODEL == 'srcnn':
             model = SRCNN().eval()
@@ -63,8 +63,6 @@ if __name__ == '__main__':
             model = EDSR(UPSCALE_FACTOR).eval()
         if MODEL == 'srgan' or MODEL == 'srresnet':
             model = Generator(UPSCALE_FACTOR).eval()
-        if MODEL == 'tsrgan' or MODEL == 'tsrresnet':
-            model = Generator_TSRGAN(UPSCALE_FACTOR).eval()
         if MODEL == 'asrgan' or MODEL == 'asrresnet':
             model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
 
