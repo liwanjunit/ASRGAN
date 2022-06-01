@@ -26,8 +26,8 @@ if __name__ == '__main__':
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_120.pth'
-    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_120.pth'
+    MODEL_NAME_G = f'asrgan_netG_epoch_{UPSCALE_FACTOR}_180.pth'
+    MODEL_NAME_D = f'asrgan_netD_epoch_{UPSCALE_FACTOR}_180.pth'
     # MODEL_NAME_G = f'asrgan_netG_epoch_2_100.pth'
     # MODEL_NAME_D = f'asrgan_netD_epoch_2_100.pth'
 
