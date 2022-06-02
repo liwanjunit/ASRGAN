@@ -27,7 +27,7 @@ if __name__ == '__main__':
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    # MODEL_NAME = 'srresnet_epoch_4_100.pth'
+    # MODEL_NAME = 'srresnet_epoch_4_{EPOCH_SUM}.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')

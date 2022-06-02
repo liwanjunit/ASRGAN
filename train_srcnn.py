@@ -27,7 +27,7 @@ if __name__ == '__main__':
     INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    # MODEL_NAME = f'srcnn_epoch_{UPSCALE_FACTOR}_50.pth'
+    # MODEL_NAME = f'srcnn_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')

@@ -27,7 +27,7 @@ if __name__ == '__main__':
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_50.pth'
+    MODEL_NAME = f'edsr_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
