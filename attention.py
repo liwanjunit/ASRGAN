@@ -62,7 +62,7 @@ class Attention(nn.Module):
 		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
 		qkv = self.qkv(x)
 		# print('qkv.shape： ', qkv.shape)
-		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=8, s=8).permute(2, 0, 3, 1, 4)
+		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=8, s=8).permute(2, 0, 3, 1, 4)	 # c b h w s
 		q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
 
 		# print('q.shape： ', q.shape)

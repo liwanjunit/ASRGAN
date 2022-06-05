@@ -14,13 +14,13 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    xmin = 764
-    xmax = 1148
-    ymin = 738
-    ymax = 1122
+    xmin = 791
+    xmax = 1047
+    ymin = 813
+    ymax = 1069
     box = (xmin, ymin, xmax, ymax)
 
-    CROP_SIZE = 384
+    CROP_SIZE = 256
     UPSCALE_FACTOR = 4
 
     image_name = 'M82.jpg'

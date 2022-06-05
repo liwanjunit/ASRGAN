@@ -105,6 +105,7 @@ class ResidualBlock(nn.Module):
         x3 = self.attention(x + x1 + x2)
 
         return x + x3 * 0.5
+        # return x + x3
 
 
 class UpsampleBLock(nn.Module):
