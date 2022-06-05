@@ -20,21 +20,19 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 8
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
 
+    MODEL = 'bilinear'
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
     # MODEL = 'srcnn'
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
-    # MODEL = 'tsrgan'
-    # MODEL = 'tsrgan_mse'
-    # MODEL = 'tsrgan_v2'
     # MODEL = 'asrresnet'
-    MODEL = 'asrgan'
+    # MODEL = 'asrgan'
 
     epoch_sum = 1
 
@@ -46,7 +44,7 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(200):
+    for i in range(1):
 
         index = 1
         psnr_sum = 0
@@ -95,7 +93,7 @@ if __name__ == '__main__':
                 index += 1
 
             print(f'----{epoch_sum}----')
-            print('PSNR:  {:.4f}'.format(psnr_sum / index))
+            print('PSNR:  {:.2f}'.format(psnr_sum / index))
             print('SSIM:  {:.4f}'.format(ssim_sum / index))
 
             psnr_set.append(psnr_sum / index)

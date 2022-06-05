@@ -21,24 +21,25 @@ from loss.loss_new import L1_Charbonnier_loss
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 4
     NUM_EPOCHS = 50
-    EPOCH_SUM = 100
+    EPOCH_SUM = 0
 
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
 
-    MODEL_NAME = f'asrresnet_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
+    # MODEL_NAME = f'asrresnet_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
+    MODEL_NAME = f'asrresnet_epoch_2_100.pth'
 
     print(f'epoch_sum:{EPOCH_SUM}')
     print(f'batch_size:{BATCH_SIZE}')
     print(f'upscale_factor:{UPSCALE_FACTOR}')
 
-    train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
+    # train_set = TrainDatasetFromFolder('/kaggle/input/data-14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    # val_set = ValDatasetFromFolder('/kaggle/input/data-14604/test', upscale_factor=UPSCALE_FACTOR)
 
-    # train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
-    # val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
+    train_set = TrainDatasetFromFolder('../data_14604/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)
+    val_set = ValDatasetFromFolder('../data_14604/test', upscale_factor=UPSCALE_FACTOR)
 
 
     # train_set = TrainDatasetFromFolder('C:/code/SRGAN-master/VOC2012/VOC2012/train', crop_size=CROP_SIZE, upscale_factor=UPSCALE_FACTOR)

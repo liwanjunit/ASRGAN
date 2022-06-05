@@ -76,13 +76,13 @@ class ValDatasetFromFolder(Dataset):
         hr_image = Image.open(self.image_filenames[index]).convert('RGB')
         w, h = hr_image.size
         crop_size = calculate_valid_crop_size(min(w, h), self.upscale_factor)
-        # crop_size = calculate_valid_crop_size(self.crop_size, self.upscale_factor)
-        # crop_size = 88
         lr_scale = Resize(crop_size // self.upscale_factor, interpolation=Image.BICUBIC)
         hr_scale = Resize(crop_size, interpolation=Image.BICUBIC)
         hr_image = CenterCrop(crop_size)(hr_image)
         lr_image = lr_scale(hr_image)
         hr_restore_img = hr_scale(lr_image)
+        # bilinear_scale = Resize(crop_size, interpolation=Image.BILINEAR)
+        # bilinear_image = bilinear_scale(lr_image)
         return ToTensor()(lr_image), ToTensor()(hr_restore_img), ToTensor()(hr_image)
 
     def __len__(self):
