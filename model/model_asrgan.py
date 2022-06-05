@@ -1,7 +1,7 @@
 import math
 import torch
 from torch import nn
-from attention import  InterlacedSparseSelfAttention
+from attention import InterlacedSparseSelfAttention
 
 
 class Generator_ASRGAN(nn.Module):
