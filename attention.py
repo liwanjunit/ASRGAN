@@ -54,7 +54,7 @@ class Attention(nn.Module):
 		# print('--------------')
 
 		B, C, H, W = x.shape
-		# print('x.shape： ', x.shape)
+		# assert False
 		x = rearrange(x, 'b c h w -> b (h w) c')
 		# x = x.reshape(B, H*W, C)
 		# print('x.shape： ', x.shape)
@@ -129,3 +129,57 @@ class CrossAttention(nn.Module):
 		x = self.proj_drop(x)
 		return x
 
+class Attention_D(nn.Module):
+	def __init__(self, dim, num_heads=8, qkv_bias=False, qk_scale=None, attn_drop=0., proj_drop=0.):
+		super().__init__()
+		self.num_heads = num_heads
+		head_dim = dim // num_heads
+		# NOTE scale factor was wrong in my original version, can set manually to be compat with prev weights
+		self.scale = qk_scale or head_dim ** -0.5
+
+		self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
+		self.attn_drop = nn.Dropout(attn_drop)
+		self.proj = nn.Linear(dim, dim)
+		self.proj_drop = nn.Dropout(proj_drop)
+
+	def forward(self, x):
+
+		# print('--------------')
+
+		B, C, H, W = x.shape
+		# assert False
+		x = rearrange(x, 'b c h w -> b (h w) c')
+		# x = x.reshape(B, H*W, C)
+		# print('x.shape： ', x.shape)
+
+		# qkv = self.qkv(x).reshape(B, H*W, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
+		qkv = self.qkv(x)
+		# print('qkv.shape： ', qkv.shape)
+		qkv = rearrange(qkv, 'b w (c h s) -> b w c h s', c=3, h=16, s=16).permute(2, 0, 3, 1, 4)	 # c b h w s
+		q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
+
+		# print('q.shape： ', q.shape)
+		# print('k.shape： ', k.shape)
+		# print('v.shape： ', v.shape)
+		# print('k.transpose(-1, -2).shape： ', k.transpose(-1, -2).shape)
+		# assert False
+
+		attn = torch.matmul(q, k.transpose(-1, -2)) * self.scale
+		# print(attn.shape)
+		attn = attn.softmax(dim=-1)
+		attn = self.attn_drop(attn)
+		# print(attn.shape)
+		x = torch.matmul(attn, v).transpose(1, 2)
+		# print(x.shape)
+		x = rearrange(x, 'b h a c -> b h (a c)')
+		# x = x.reshape(B, H*W, C)
+		# print(x.shape)
+		# assert False
+
+		x = self.proj(x)
+		x = self.proj_drop(x)
+		x = rearrange(x, 'b (h w) c -> b c h w', h=H, w=W)
+		# x = x.reshape(B, C, H, W)
+		# print("x after -->", x.shape)
+		# assert False
+		return x

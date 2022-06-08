@@ -16,14 +16,14 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    xmin = 796
-    xmax = 1308
-    ymin = 896
-    ymax = 1408
-    box = (xmin, ymin, xmax, ymax)
-
     CROP_SIZE = 512
     UPSCALE_FACTOR = 4
+
+    xmin = 796
+    ymin = 896
+    xmax = xmin + CROP_SIZE
+    ymax = ymin + CROP_SIZE
+    box = (xmin, ymin, xmax, ymax)
 
     image_name = 'NGC4631.png'
     print('image_name: ' + image_name)

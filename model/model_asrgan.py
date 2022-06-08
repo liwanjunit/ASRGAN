@@ -85,7 +85,8 @@ class Discriminator_ASRGAN(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        return torch.sigmoid(self.net(x).view(batch_size))
+        out = self.net(x)
+        return torch.sigmoid(out.view(batch_size))
 
 
 class ResidualBlock(nn.Module):
