@@ -16,16 +16,16 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    xmin = 791
-    xmax = 1047
-    ymin = 813
-    ymax = 1069
+    xmin = 796
+    xmax = 1308
+    ymin = 896
+    ymax = 1408
     box = (xmin, ymin, xmax, ymax)
 
-    CROP_SIZE = 256
+    CROP_SIZE = 512
     UPSCALE_FACTOR = 4
 
-    image_name = 'M82.jpg'
+    image_name = 'NGC4631.png'
     print('image_name: ' + image_name)
     print('----------------------')
 
@@ -33,10 +33,10 @@ if __name__ == '__main__':
 
     SRCNN_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/srcnn_x{UPSCALE_FACTOR}/model/srcnn_epoch_{UPSCALE_FACTOR}_69.pth'
     # EDSR_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/edsr_x{UPSCALE_FACTOR}/model/edsr_epoch_{UPSCALE_FACTOR}_52.pth'
-    SRResNet_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/model/srresnet_epoch_{UPSCALE_FACTOR}_85.pth'
+    SRResNet_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/srresnet_x{UPSCALE_FACTOR}/model/srresnet_epoch_{UPSCALE_FACTOR}_80.pth'
     SRGAN_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/G/srgan_netG_epoch_{UPSCALE_FACTOR}_98.pth'
-    ASRResNet_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrresnet_x{UPSCALE_FACTOR}/model/asrresnet_epoch_{UPSCALE_FACTOR}_94.pth'
-    ASRGAN_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/G/asrgan_netG_epoch_{UPSCALE_FACTOR}_93.pth'
+    ASRResNet_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrresnet_x{UPSCALE_FACTOR}/model/asrresnet_epoch_{UPSCALE_FACTOR}_82.pth'
+    ASRGAN_MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/G/asrgan_netG_epoch_{UPSCALE_FACTOR}_88.pth'
 
     # hr_path = PATH + 'test/'
     hr_path = PATH + 'new/'

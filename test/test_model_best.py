@@ -14,16 +14,16 @@ from model.model_esdr import EDSR
 
 if __name__ == '__main__':
 
-    xmin = 791
-    xmax = 1047
-    ymin = 813
-    ymax = 1069
+    xmin = 796
+    xmax = 1308
+    ymin = 896
+    ymax = 1408
     box = (xmin, ymin, xmax, ymax)
 
-    CROP_SIZE = 256
+    CROP_SIZE = 512
     UPSCALE_FACTOR = 4
 
-    image_name = 'M82.jpg'
+    image_name = 'NGC4631.png'
     print('image_name: ' + image_name)
     print('----------------------')
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     asrresnet_model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
     asrgan_model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
 
-    img = Image.open(hr_path + image_name)
+    img = Image.open(hr_path + image_name).convert('RGB')
     hr_image = img.crop(box)
 
     lr_scale = Resize(CROP_SIZE // UPSCALE_FACTOR, interpolation=Image.BICUBIC)
