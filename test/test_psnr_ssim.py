@@ -33,7 +33,6 @@ if __name__ == '__main__':
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'asrresnet'
-    # MODEL = 'asrresnet_new'
     # MODEL = 'asrgan'
     MODEL = 'sasrgan'
 
@@ -47,13 +46,13 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    for i in range(50):
+    for i in range(100):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
 
-        if MODEL == 'srcnn' or MODEL == 'edsr' or MODEL == 'srresnet' or MODEL == 'asrresnet' or MODEL == 'asrresnet_new':
+        if MODEL == 'srcnn' or MODEL == 'edsr' or MODEL == 'srresnet' or MODEL == 'asrresnet':
             MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
         else:
             MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/G/{MODEL}_netG_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
@@ -64,7 +63,7 @@ if __name__ == '__main__':
             model = EDSR(UPSCALE_FACTOR).eval()
         if MODEL == 'srgan' or MODEL == 'srresnet':
             model = Generator(UPSCALE_FACTOR).eval()
-        if MODEL == 'asrgan' or MODEL == 'asrresnet' or MODEL == 'asrresnet_new':
+        if MODEL == 'asrgan' or MODEL == 'asrresnet':
             model = Generator_ASRGAN(UPSCALE_FACTOR).eval()
         if MODEL == 'sasrgan' or MODEL == 'sasrresnet':
             model = Generator_SASRGAN(UPSCALE_FACTOR).eval()

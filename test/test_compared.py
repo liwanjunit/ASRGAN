@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 4
 
     bilinear_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/bilinear_test_{UPSCALE_FACTOR}.csv'
     bicubic_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/bicubic_test_{UPSCALE_FACTOR}.csv'
@@ -14,6 +14,7 @@ if __name__ == '__main__':
     srgan_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/srgan_x{UPSCALE_FACTOR}/srgan_test_{UPSCALE_FACTOR}.csv'
     asrresnet_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrresnet_x{UPSCALE_FACTOR}/asrresnet_test_{UPSCALE_FACTOR}.csv'
     asrgan_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_x{UPSCALE_FACTOR}/asrgan_test_{UPSCALE_FACTOR}.csv'
+    asrgan_new_path = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/asrgan_new_x{UPSCALE_FACTOR}/asrgan_test_{UPSCALE_FACTOR}.csv'
 
     bilinear_data = pd.read_csv(bilinear_path)
     bicubic_data = pd.read_csv(bicubic_path)
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     srgan_data = pd.read_csv(srgan_path)
     asrresnet_data = pd.read_csv(asrresnet_path)
     asrgan_data = pd.read_csv(asrgan_path)
+    asrgan_new_data = pd.read_csv(asrgan_new_path)
 
     bilinear_psnr_sum = []
     bilinear_ssim_sum = []
@@ -47,6 +49,9 @@ if __name__ == '__main__':
 
     asrgan_psnr_sum = []
     asrgan_ssim_sum = []
+
+    asrgan_new_psnr_sum = []
+    asrgan_new_ssim_sum = []
 
     k = 0
 
@@ -76,19 +81,23 @@ if __name__ == '__main__':
         asrgan_psnr_sum.append(asrgan_data['PSNR'][i + k])
         asrgan_ssim_sum.append(asrgan_data['SSIM'][i + k])
 
+        asrgan_new_psnr_sum.append(asrgan_new_data['PSNR'][i + k])
+        asrgan_new_ssim_sum.append(asrgan_new_data['SSIM'][i + k])
+
     x = range(1, 100-k + 1)
 
     plt.figure(1)
     # plt.subplot(1, 2, 1)
     plt.title('PSNR')
-    plt.plot(x, bilinear_psnr_sum, color='c', linestyle='--', marker='', label='BILINEAR')
-    plt.plot(x, bicubic_psnr_sum, color='k', linestyle='--', marker='', label='BICUBIC')
-    plt.plot(x, srcnn_psnr_sum, color='g', linestyle=':', marker='', label='SRCNN')
+    # plt.plot(x, bilinear_psnr_sum, color='c', linestyle='--', marker='', label='BILINEAR')
+    # plt.plot(x, bicubic_psnr_sum, color='k', linestyle='--', marker='', label='BICUBIC')
+    # plt.plot(x, srcnn_psnr_sum, color='g', linestyle=':', marker='', label='SRCNN')
     # plt.plot(x, edsr_psnr_sum, color='c', linestyle=':', marker='', label='EDSR')
-    plt.plot(x, srresnet_psnr_sum, color='y', linestyle='--', label='SRResNet')
-    plt.plot(x, srgan_psnr_sum, color='r', linestyle='-.', marker='', label='SRGAN')
-    plt.plot(x, asrresnet_psnr_sum, color='m', linestyle='--', label='ASRResNet')
+    # plt.plot(x, srresnet_psnr_sum, color='y', linestyle='--', label='SRResNet')
+    # plt.plot(x, srgan_psnr_sum, color='r', linestyle='-.', marker='', label='SRGAN')
+    # plt.plot(x, asrresnet_psnr_sum, color='m', linestyle='--', label='ASRResNet')
     plt.plot(x, asrgan_psnr_sum, color='b', linestyle='-', marker='', label='ASRGAN')
+    plt.plot(x, asrgan_new_psnr_sum, color='r', linestyle='-', marker='', label='ASRGAN_new')
     plt.xlabel('EPOCH')
     plt.ylabel('PSNR(dB)')
     plt.legend(loc='center right')
@@ -96,14 +105,15 @@ if __name__ == '__main__':
     plt.figure(2)
     # plt.subplot(1, 2, 2)
     plt.title('SSIM')
-    plt.plot(x, bilinear_ssim_sum, color='c', linestyle='--', marker='', label='BILINEAR')
-    plt.plot(x, bicubic_ssim_sum, color='k', linestyle='--', marker='', label='BICUBIC')
-    plt.plot(x, srcnn_ssim_sum, color='g', linestyle=':',  marker='', label='SRCNN')
+    # plt.plot(x, bilinear_ssim_sum, color='c', linestyle='--', marker='', label='BILINEAR')
+    # plt.plot(x, bicubic_ssim_sum, color='k', linestyle='--', marker='', label='BICUBIC')
+    # plt.plot(x, srcnn_ssim_sum, color='g', linestyle=':',  marker='', label='SRCNN')
     # plt.plot(x, edsr_ssim_sum, color='c', linestyle=':',  marker='', label='EDSR')
-    plt.plot(x, srresnet_ssim_sum, color='y', linestyle='--', label='SRResNet')
-    plt.plot(x, srgan_ssim_sum, color='r', linestyle='-.',  marker='', label='SRGAN')
-    plt.plot(x, asrresnet_ssim_sum, color='m', linestyle='--', label='ASRResNet')
+    # plt.plot(x, srresnet_ssim_sum, color='y', linestyle='--', label='SRResNet')
+    # plt.plot(x, srgan_ssim_sum, color='r', linestyle='-.',  marker='', label='SRGAN')
+    # plt.plot(x, asrresnet_ssim_sum, color='m', linestyle='--', label='ASRResNet')
     plt.plot(x, asrgan_ssim_sum, color='b', linestyle='-',  marker='', label='ASRGAN')
+    plt.plot(x, asrgan_new_ssim_sum, color='r', linestyle='-',  marker='', label='ASRGAN_new')
     plt.xlabel('EPOCH')
     plt.ylabel('SSIM')
     # plt.ylim(ymin=0.3, ymax=0.95)
