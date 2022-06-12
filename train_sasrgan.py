@@ -18,18 +18,18 @@ from model.model_sasrgan import Generator_SASRGAN, Discriminator_SASRGAN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 4
     NUM_EPOCHS = 25
-    EPOCH_SUM = 175
+    EPOCH_SUM = 0
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
     G_INIT_LR = 0.0001
 
-    MODEL_NAME_G = f'sasrgan_netG_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
-    MODEL_NAME_D = f'sasrgan_netD_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
-    # MODEL_NAME_G = f'sasrgan_netG_epoch_2_200.pth'
-    # MODEL_NAME_D = f'sasrgan_netD_epoch_2_200.pth'
+    # MODEL_NAME_G = f'sasrgan_netG_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
+    # MODEL_NAME_D = f'sasrgan_netD_epoch_{UPSCALE_FACTOR}_{EPOCH_SUM}.pth'
+    MODEL_NAME_G = f'sasrgan_netG_epoch_2_200.pth'
+    MODEL_NAME_D = f'sasrgan_netD_epoch_2_200.pth'
 
     print(f'crop_size:{CROP_SIZE}')
     print(f'epoch_sum:{EPOCH_SUM}')
