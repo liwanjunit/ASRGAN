@@ -1,16 +1,13 @@
 
-import os
 from math import log10
-
 import torch
-import torchvision.utils as utils
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 import pandas as pd
-
+import pytorch_ssim
+import lpips
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import pytorch_ssim
 from data_utils import TestDatasetFromFolder, display_transform, ValDatasetFromFolder
 from model.model_tsrgan import Generator_TSRGAN
 from model.model_srgan import Generator
@@ -33,24 +30,28 @@ if __name__ == '__main__':
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'asrresnet'
-    # MODEL = 'asrgan'
-    MODEL = 'sasrgan'
+    MODEL = 'asrgan'
+    # MODEL = 'sasrgan'
 
     epoch_sum = 1
 
     psnr_set = []
     ssim_set = []
+    lpips_set = []
 
     # test_set = TestDatasetFromFolder(TEST_DIR)
     test_set = ValDatasetFromFolder(TEST_DIR, upscale_factor=UPSCALE_FACTOR)
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
+    lpips_fn = lpips.LPIPS(net='alex')
+
     for i in range(200):
 
         index = 1
         psnr_sum = 0
         ssim_sum = 0
+        lpips_sum = 0
 
         if MODEL == 'srcnn' or MODEL == 'edsr' or MODEL == 'srresnet' or MODEL == 'asrresnet':
             MODEL_NAME = f'E:/code/train_results/new_model/x{UPSCALE_FACTOR}/{MODEL}_x{UPSCALE_FACTOR}/model/{MODEL}_epoch_{UPSCALE_FACTOR}_{i + index}.pth'
@@ -70,6 +71,7 @@ if __name__ == '__main__':
 
         if torch.cuda.is_available():
             model = model.cuda()
+            lpips_fn = lpips_fn.cuda()
         model.load_state_dict(torch.load(MODEL_NAME), False)
 
         with torch.no_grad():
@@ -91,23 +93,28 @@ if __name__ == '__main__':
                 # print('PSNR:  {:.4f}'.format(psnr))
                 ssim = pytorch_ssim.ssim(sr_image, hr_image).item()
                 # print('SSIM:  {:.4f}'.format(ssim))
+                lpips = lpips_fn(hr_image, sr_image)
+
                 psnr_sum += psnr
                 ssim_sum += ssim
+                lpips_sum += lpips
 
                 index += 1
 
             print(f'----{epoch_sum}----')
             print('PSNR:  {:.2f}'.format(psnr_sum / index))
             print('SSIM:  {:.4f}'.format(ssim_sum / index))
+            print('LPIPS: {:.4f}'.format((lpips_sum / index).item()))
 
             psnr_set.append(psnr_sum / index)
             ssim_set.append(ssim_sum / index)
+            lpips_set.append((lpips_sum / index).item())
 
             epoch_sum += 1
 
     out_path = '../statistics/'
     data_frame = pd.DataFrame(
-        data={'PSNR': psnr_set, 'SSIM': ssim_set},
+        data={'PSNR': psnr_set, 'SSIM': ssim_set, 'LPIPS': lpips_set},
         index=range(1, epoch_sum))
     data_frame.to_csv(out_path + f'{MODEL}_test_' + str(UPSCALE_FACTOR) + '.csv', index_label='Epoch')
 
@@ -120,6 +127,10 @@ if __name__ == '__main__':
     plt.figure(2)
     plt.plot(x, ssim_set)
     plt.xlabel("SSIM")
+
+    plt.figure(3)
+    plt.plot(x, lpips_set)
+    plt.xlabel("LPIPS")
 
     plt.show()
 
