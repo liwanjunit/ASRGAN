@@ -18,7 +18,7 @@ from model.model_sasrgan import Generator_SASRGAN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 4
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
@@ -27,10 +27,10 @@ if __name__ == '__main__':
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
     # MODEL = 'srcnn'
-    # MODEL = 'srresnet'
+    MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'asrresnet'
-    MODEL = 'asrgan'
+    # MODEL = 'asrgan'
     # MODEL = 'sasrgan'
 
     epoch_sum = 1
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
     lpips_fn = lpips.LPIPS(net='alex')
 
-    for i in range(200):
+    for i in range(100):
 
         index = 1
         psnr_sum = 0
