@@ -18,7 +18,7 @@ from model.model_sasrgan import Generator_SASRGAN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 8
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'

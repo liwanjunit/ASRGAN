@@ -19,8 +19,8 @@ if __name__ == '__main__':
 
     CROP_SIZE = 128
     UPSCALE_FACTOR = 4
-    NUM_EPOCHS = 5
-    EPOCH_SUM = 95
+    NUM_EPOCHS = 8
+    EPOCH_SUM = 92
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
