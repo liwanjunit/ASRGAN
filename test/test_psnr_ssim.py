@@ -27,11 +27,11 @@ if __name__ == '__main__':
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
     # MODEL = 'srcnn'
-    MODEL = 'srresnet'
+    # MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'asrresnet'
     # MODEL = 'asrgan'
-    # MODEL = 'sasrgan'
+    MODEL = 'sasrgan'
 
     epoch_sum = 1
 
