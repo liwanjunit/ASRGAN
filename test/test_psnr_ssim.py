@@ -18,7 +18,7 @@ from model.model_sasrgan import Generator_SASRGAN
 
 if __name__ == '__main__':
 
-    UPSCALE_FACTOR = 8
+    UPSCALE_FACTOR = 4
 
     # TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}'
     TEST_DIR = f'../data/new_data/test_x{UPSCALE_FACTOR}/target/'
@@ -26,12 +26,12 @@ if __name__ == '__main__':
     # MODEL = 'bilinear'
     # MODEL = 'bicubic'
     # MODEL = 'edsr'
-    # MODEL = 'srcnn'
+    MODEL = 'srcnn'
     # MODEL = 'srresnet'
     # MODEL = 'srgan'
     # MODEL = 'asrresnet'
     # MODEL = 'asrgan'
-    MODEL = 'sasrgan'
+    # MODEL = 'sasrgan'
 
     epoch_sum = 1
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         with torch.no_grad():
 
             # for image_name, lr_image, _, hr_image in test_bar:
-            for lr_image, _, hr_image in test_bar:
+            for _, lr_image, hr_image in test_bar:
 
                 # image_name = image_name[0]
                 lr_image = Variable(lr_image, volatile=True)
