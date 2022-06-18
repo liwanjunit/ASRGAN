@@ -18,7 +18,7 @@ from model.model_sasrgan import Generator_SASRGAN, Discriminator_SASRGAN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 8
     NUM_EPOCHS = 25
     EPOCH_SUM = 100
     BATCH_SIZE = 2
