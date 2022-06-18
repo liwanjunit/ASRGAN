@@ -18,9 +18,9 @@ from model.model_srgan import Generator, Discriminator
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 2
+    UPSCALE_FACTOR = 8
     NUM_EPOCHS = 25
-    EPOCH_SUM = 125
+    EPOCH_SUM = 150
     BATCH_SIZE = 2
 
     D_INIT_LR = 0.0001
