@@ -21,9 +21,9 @@ from loss.loss_new import L1_Charbonnier_loss
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 8
-    NUM_EPOCHS = 50
-    EPOCH_SUM = 50
+    UPSCALE_FACTOR = 4
+    NUM_EPOCHS = 100
+    EPOCH_SUM = 100
 
     G_INIT_LR = 0.0001
     BATCH_SIZE = 2
