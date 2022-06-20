@@ -15,13 +15,13 @@ from tqdm import tqdm
 import pytorch_ssim
 from data_utils import TrainDatasetFromFolder, ValDatasetFromFolder, display_transform
 from model.model_asrgan import Generator_ASRGAN
-from loss.loss_new import L1_Charbonnier_loss
+from loss.loss_new import L1_Charbonnier_loss, GeneratorLoss_NEW
 
 
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 2
     NUM_EPOCHS = 100
     EPOCH_SUM = 100
 
