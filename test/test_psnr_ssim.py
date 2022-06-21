@@ -44,9 +44,10 @@ if __name__ == '__main__':
     test_loader = DataLoader(dataset=test_set, num_workers=4, batch_size=1, shuffle=False)
     test_bar = tqdm(test_loader, desc='[testing benchmark datasets]')
 
-    lpips_fn = lpips.LPIPS(net='alex')
+    lpips_fn = lpips.LPIPS(net='vgg')
+    # lpips_fn = lpips.LPIPS(net='alex')
 
-    for i in range(1):
+    for i in range(200):
 
         index = 1
         psnr_sum = 0
