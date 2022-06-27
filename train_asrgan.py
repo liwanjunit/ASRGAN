@@ -18,7 +18,7 @@ from model.model_asrgan import Generator_ASRGAN, Discriminator_ASRGAN
 if __name__ == '__main__':
 
     CROP_SIZE = 128
-    UPSCALE_FACTOR = 4
+    UPSCALE_FACTOR = 8
     NUM_EPOCHS = 25
     EPOCH_SUM = 100
     BATCH_SIZE = 2
